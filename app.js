@@ -15,14 +15,16 @@ var bodyParser = require('body-parser');
 
 var Conversation = require('watson-developer-cloud/conversation/v1');
 
-require('dotenv').config({ silent: true });
+// require('dotenv').config({ silent: true });
 
-var cfenv = require('cfenv');
+// var cfenv = require('cfenv');
 // app.use(express.static(__dirname + '/public'));
 
 var app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+// start server on the specified port and binding host
+app.listen(process.env.PORT || 5000);
 
 var userDataFacebook = null;
 var contexto_atual = null;
@@ -125,10 +127,4 @@ function sendMessage(sender, text_) {
     });
 };
 
-var appEnv = cfenv.getAppEnv();
 
-// start server on the specified port and binding host
-app.listen(appEnv.port || 5000, '0.0.0.0', () => {
-    // print a message when the server starts listening
-    console.log("server starting on " + appEnv.url);
-});
