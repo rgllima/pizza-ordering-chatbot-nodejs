@@ -11,8 +11,8 @@
 		"body-parser": "^1.18.2",
 		"express": "^4.16.2",
 		"fb": "^2.0.0",
-		"firebase-admin": "^5.6.0",
+		"firebase-admin": "^5.9.0",
 		"request": "^2.83.0",
-		"watson-developer-cloud": "^2.0.1"
+		"watson-developer-cloud": "^3.0.6"
 	}
 }
