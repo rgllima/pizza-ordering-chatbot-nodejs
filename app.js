@@ -29,7 +29,7 @@ app.listen(process.env.PORT || 5000);
 var userDataFacebook = null;
 var contexto_atual = null;
 
-// Server index page
+// remover isso aki
 app.get("/", function (req, res) {
     res.send("Deployed!");
 });
@@ -78,7 +78,8 @@ function callWatson(payload, sender) {
 
 //---------------------Facebook-----------------------------
 app.get('/webhook/', function (req, res) {
-    if (req.query['hub.verify_token'] === process.env.FB_TOKENVERIFIC) res.send(req.query['hub.challenge']);
+    if (req.query['hub.verify_token'] === process.env.FB_TOKENVERIFIC)
+        res.send(req.query['hub.challenge']);
     res.send('Erro de validação no token.');
 });
 
