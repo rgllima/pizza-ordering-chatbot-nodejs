@@ -117,16 +117,16 @@ function sendMessage(sender, text_) {
 		    "payload": {
 				"template_type": "generic",
 			    "elements": [{
-					"title": "First card",
+					"title": "Mussarela",
 				    "subtitle": "Element #1 of an hscroll",
-				    "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
+				    "image_url": "https://goo.gl/N2Wb4t",
 				    "buttons": [{
 					    "type": "web_url",
 					    "url": "https://www.messenger.com",
 					    "title": "web url"
 				    }, {
 					    "type": "postback",
-					    "title": "Postback",
+					    "title": "Mussarela",
 					    "payload": "Payload for first element in a generic bubble",
 				    }],
 			    }, {
