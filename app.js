@@ -118,7 +118,7 @@ function sendMessage(sender, text_) {
 				"template_type": "generic",
 			    "elements": [{
 					"title": "Mussarela",
-				    "subtitle": "Element #1 of an hscroll",
+				    "subtitle": "{{user_first_name}}",
 				    "image_url": "https://goo.gl/N2Wb4t",
 				    "buttons": [{
 					    "type": "web_url",
