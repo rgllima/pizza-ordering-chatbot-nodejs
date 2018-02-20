@@ -84,6 +84,7 @@ app.get('/webhook/', function (req, res) {
 });
 
 app.post('/webhook/', (req, res) => {
+    getStarted();
     var text = null;
 
     messaging_events = req.body.entry[0].messaging;
@@ -104,7 +105,7 @@ app.post('/webhook/', (req, res) => {
 
         callWatson(payload, sender);
     }
-    res.sendStatus(200).send('EVENT_RECEIVED');//rever o .send('EVENT_RECEIVED')
+    res.sendStatus(200);
 });
 
 function sendMessage(sender, text_) {
@@ -144,7 +145,6 @@ function sendMessage(sender, text_) {
     }
     messageData = messageDt;
     console.log({ text: text_ });//remover-------------
-    
 //---------------------------------------------------------------
 //    messageData = { text: text_ };
 
@@ -158,7 +158,7 @@ function sendMessage(sender, text_) {
         }
     }, function (error, response, body) {
         if (error) {
-            console.log('Error sending message: ', error);
+            console.log('Erro no envio da mensagem ', error);
         } else if (response.body.error) {
             console.log('Error: ', response.body.error);
         }
@@ -166,3 +166,24 @@ function sendMessage(sender, text_) {
 };
 
 
+//testando coisas
+
+function getStarted() {
+    console.console.log('\n\ngetStarted\n\n');
+    
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messenger_profile',
+        qs: { access_token: process.env.FB_TOKEN },
+        method: 'POST',
+        json: {
+            recipient: { id: sender },
+            "get_started": {"payload": "<postback_payload>"}
+        }
+    }, function (error, response, body) {
+        if (error) {
+            console.log('Erro no envio da mensagem ', error);
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error);
+        }
+    });
+}
