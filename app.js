@@ -153,7 +153,7 @@ function sendMessage(sender, text_) {
         json: {
             recipient: { id: sender },
             message: messageData,
-            sender_action: typing_on,
+            "sender_action": "typing_on",// rever isso aki
         }
     }, function (error, response, body) {
         if (error) {
