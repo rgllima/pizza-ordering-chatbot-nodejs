@@ -143,6 +143,8 @@ function sendMessage(sender, text_) {
 	    }
     }
     messageData = messageDt;
+    console.log({ text: text_ });//remover-------------
+    
 //---------------------------------------------------------------
 //    messageData = { text: text_ };
 
@@ -153,7 +155,6 @@ function sendMessage(sender, text_) {
         json: {
             recipient: { id: sender },
             message: messageData,
-            "sender_action": "typing_on",// rever isso aki
         }
     }, function (error, response, body) {
         if (error) {
