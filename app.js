@@ -84,34 +84,6 @@ app.get('/webhook/', function (req, res) {
 });
 
 app.post('/webhook/', (req, res) => {
-
-    {
-        "persistent_menu":[
-          {
-            "locale":"default",
-            "composer_input_disabled": true,
-            "call_to_actions":[
-              {
-                "title":"My Account",
-                "type":"nested",
-                "call_to_actions":[
-                  {
-                    "title":"Pay Bill",
-                    "type":"postback",
-                    "payload":"PAYBILL_PAYLOAD"
-                  },
-                  {
-                    "type":"web_url",
-                    "title":"Latest News",
-                    "url":"https://www.messenger.com/",
-                    "webview_height_ratio":"full"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
     var text = null;
 
     messaging_events = req.body.entry[0].messaging;
@@ -181,6 +153,7 @@ function sendMessage(sender, text_) {
         json: {
             recipient: { id: sender },
             message: messageData,
+            sender_action: typing_on,
         }
     }, function (error, response, body) {
         if (error) {
