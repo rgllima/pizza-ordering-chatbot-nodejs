@@ -154,7 +154,6 @@ function sendMessage(sender, text_) {
         json: {
             recipient: { id: sender },
             message: messageData,
-            sender_action: "typing_on",
         }
     }, function (error, response, body) {
         if (error) {
