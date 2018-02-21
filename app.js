@@ -37,16 +37,16 @@ app.get("/", function (req, res) {
 //---------------------Firebase-----------------------------
 function writeFirebase(results, senderUser, payld) {
     if (userDataFacebook == null) {
-        FB.api('me', function (res) {
+        FB.api(senderUser, function (res) {
             if (!res || res.error) {
                 console.log(!res ? 'error occurred' : res.error);
                 return;
             }
-            firebase.salvarPedidos(admin, results, res, senderUser, payld);//rever isso aki---------------------
+            firebase.salvarPedidos(admin, results, res, payld);//rever isso aki---------------------
             userDataFacebook = res;
         });
     } else {
-        firebase.salvarPedidos(admin, results, userDataFacebook);//rever isso aki---------------------
+        firebase.salvarPedidos(admin, results, userDataFacebook, payld);//rever isso aki---------------------
     }
 }
 
@@ -70,6 +70,7 @@ function callWatson(payload, sender) {
             var i = 0;
             while (i < results.output.text.length) {
                 sendMessage(sender, results.output.text[i++]);
+                console.log("Console SendMessage: "+results.output.text[i])// rever------------
             }
         }
         writeFirebase(results, sender, payload);//rever isso aki
