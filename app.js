@@ -35,14 +35,14 @@ app.get("/", function (req, res) {
 });
 
 //---------------------Firebase-----------------------------
-function writeFirebase(results, senderUser) {
+function writeFirebase(results, senderUser, payld, reqw, resw) {
     if (userDataFacebook == null) {
         FB.api('me', function (res) {
             if (!res || res.error) {
                 console.log(!res ? 'error occurred' : res.error);
                 return;
             }
-            firebase.salvarPedidos(admin, results, res, senderUser);//rever isso aki---------------------
+            firebase.salvarPedidos(admin, results, res, senderUser, payld, reqw, resw);//rever isso aki---------------------
             userDataFacebook = res;
         });
     } else {
@@ -59,7 +59,7 @@ var w_conversation = new Conversation({
     version: 'v1'
 });
 
-function callWatson(payload, sender) {
+function callWatson(payload, sender, reqs, ress) { //remover reqs e ress
     w_conversation.message(payload, function (err, results) {
 
         if (err) return responseToRequest.send("Erro > " + JSON.stringify(err));
@@ -72,7 +72,7 @@ function callWatson(payload, sender) {
                 sendMessage(sender, results.output.text[i++]);
             }
         }
-        writeFirebase(results, sender);//rever isso aki
+        writeFirebase(results, sender, payload, reqs, ress);//rever isso aki
     });
 }
 
@@ -102,7 +102,7 @@ app.post('/webhook/', (req, res) => {
             alternate_intents: true
         };
 
-        callWatson(payload, sender);
+        callWatson(payload, sender, req, res); //remover 'req' e 'res'--------------------
     }
     res.sendStatus(200);
 });
