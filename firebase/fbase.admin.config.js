@@ -9,19 +9,20 @@ const connectToFirebase = () => {
   return admin;
 }
 
-const salvarPedidos = (admin, respostaWatson, res, sender)=> {
+const salvarPedidos = (admin, respostaWatson, res, sender, payld)=> {
   var ret = '';
   var db = admin.database();
   
   if (respostaWatson != null){
      var id = respostaWatson.context.conversation_id;
      db.ref("/pedidos/" + id).set({
-       Data: respostaWatson.context,
+       Data: respostaWatson,
        Status: "Pendente",
        Address: "",
        Name: res.name,
        Id: res.id,
-       SenderUser: sender
+       SenderUser: sender,
+       PayLD: payld
      });
   }
 }

@@ -35,14 +35,14 @@ app.get("/", function (req, res) {
 });
 
 //---------------------Firebase-----------------------------
-function writeFirebase(results, senderUser) {
+function writeFirebase(results, senderUser, payld) {
     if (userDataFacebook == null) {
         FB.api('me', function (res) {
             if (!res || res.error) {
                 console.log(!res ? 'error occurred' : res.error);
                 return;
             }
-            firebase.salvarPedidos(admin, results, res, senderUser);//rever isso aki---------------------
+            firebase.salvarPedidos(admin, results, res, senderUser, payld);//rever isso aki---------------------
             userDataFacebook = res;
         });
     } else {
@@ -72,7 +72,7 @@ function callWatson(payload, sender) {
                 sendMessage(sender, results.output.text[i++]);
             }
         }
-        writeFirebase(results, sender);//rever isso aki
+        writeFirebase(results, sender, payload);//rever isso aki
     });
 }
 
