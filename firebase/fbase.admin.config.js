@@ -19,7 +19,7 @@ const salvarPedidos = (admin, respostaWatson, userInfo, payld)=> {
        Data: respostaWatson,
        Status: "Pendente",
        Address: "",
-       userInfo: userInfo,
+       userData: userInfo,
        //Name: res.name,
        //Id: res,
        PayLD: payld

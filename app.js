@@ -71,12 +71,9 @@ function callWatson(payload, sender) {
 
         if (results != null && results.output != null) {
             var i = 0;
-            console.log("Analisando o sendMessage")//remover----------------
             while (i < results.output.text.length) {
                 sendMessage(sender, results.output.text[i++]);
-                console.log(+results.output.text[i])// rever------------
             }
-            console.log("sendMessage Analisado")//remover----------------
         }
         writeFirebase(results, sender, payload);//rever isso aki
     });
@@ -178,13 +175,10 @@ function getUserName(sender) {
     request({
         url: usersPublicProfile,
         json: true // parse
-    }, function (error, response, body) {
-            if (!error && response.statusCode === 200) {
-                console.log('Oi ' + body.first_name);
-            }
-            console.log('getUserName')
-            console.log(body)
-            userInfo = body;
-        });
-        return userInfo;
-    };
+    }, (error, response, body) => {
+        if (!error && response.statusCode === 200) {
+                userInfo = body;
+        }
+    });
+    return userInfo;
+};
