@@ -26,7 +26,7 @@ app.use(bodyParser.json())
 // start server on the specified port and binding host
 app.listen(process.env.PORT || 5000);
 
-var userDataFacebook = null;
+var infoUsuario = null;
 var contexto_atual = null;
 
 // remover isso aki
@@ -36,7 +36,8 @@ app.get("/", function (req, res) {
 
 //---------------------Firebase-----------------------------
 function writeFirebase(results, sender, payld) {
-    var userInfo = getUserName(sender);
+    if (infoUsuario  == null) getUserName(sender);
+    
     console.log("UserInfo")
     console.log(userInfo)
     firebase.salvarPedidos(admin, results, userInfo, payld)
