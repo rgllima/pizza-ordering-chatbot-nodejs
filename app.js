@@ -50,7 +50,15 @@ var w_conversation = new Conversation({
     version: 'v1'
 });
 
-function callWatson(payload, sender) {
+// function callWatson(payload, sender) {
+function callWatson(text, sender) {
+    var payload = {
+        workspace_id: process.env.WORKSPACE_ID,
+        context: contexto_atual || {},
+        input: { "text": text },
+        alternate_intents: true
+    };
+
     w_conversation.message(payload, function (err, results) {
 
         if (err) return responseToRequest.send("Erro > " + JSON.stringify(err));
@@ -60,9 +68,7 @@ function callWatson(payload, sender) {
         if (results != null && results.output != null) {
             var i = 0;
             while (i < results.output.text.length) {
-                // sendMessage(sender, results.output.text[i++]);
-
-                //testando o envio de respostas personalizadas
+                //enviando respostas personalizadas
                 if (results.intents[0].intent == "pedir_pizza") {
                     buildCardMessage(sender);
                     break;
@@ -89,20 +95,26 @@ app.post('/webhook/', (req, res) => {
         event = req.body.entry[0].messaging[i];
         sender = event.sender.id;
 
-        if (infoUsuario  == null) getUserInfo(sender); //pegar as informações do usuário
+        // if (infoUsuario  == null) getUserInfo(sender); //pegar as informações do usuário
 
         if (event.message && event.message.text) text = event.message.text;
         else if (event.postback && !text) text = event.postback.payload;
         else break;
 
-        var payload = {
-            workspace_id: process.env.WORKSPACE_ID,
-            context: contexto_atual || {},
-            input: { "text": text },
-            alternate_intents: true
-        };
+        // var payload = {
+        //     workspace_id: process.env.WORKSPACE_ID,
+        //     context: contexto_atual || {},
+        //     input: { "text": text },
+        //     alternate_intents: true
+        // };
 
-        callWatson(payload, sender); //sender - id usuário facebook
+        // callWatson(payload, sender); //sender - id usuário facebook
+//-----------------------------------------------------------------------------
+                                //ZONA DE TESTES
+        if (infoUsuario  == null) getUserInfo(sender, callWatson(text, sender)); //pegar as informações do usuário
+        else callWatson(text, sender);
+
+//-----------------------------------------------------------------------------
     }
     res.sendStatus(200);
 });
@@ -133,7 +145,7 @@ function sendMessage(sender, messageData) {
 
 //testando
 
-function getUserInfo(sender) {
+function getUserInfo(sender, callback) {
     var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.FB_TOKEN;
     request({
         url: usersPublicProfile,
@@ -143,6 +155,7 @@ function getUserInfo(sender) {
             infoUsuario = body;
         }
     });
+    callback();
 };
 
 function buildTextMessage(sender, text_) {
