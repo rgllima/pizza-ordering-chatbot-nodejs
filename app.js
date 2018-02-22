@@ -75,13 +75,14 @@ app.get('/webhook/', function (req, res) {
 });
 
 app.post('/webhook/', (req, res) => {
-    if (infoUsuario  == null) getUserName(sender);
     var text = null;
 
     messaging_events = req.body.entry[0].messaging;
     for (i = 0; i < messaging_events.length; i++) {
         event = req.body.entry[0].messaging[i];
         sender = event.sender.id;
+
+        if (infoUsuario  == null) getUserName(sender); //pegar as informações do usuário
 
         if (event.message && event.message.text) text = event.message.text;
         else if (event.postback && !text) text = event.postback.payload;
@@ -93,7 +94,7 @@ app.post('/webhook/', (req, res) => {
             input: { "text": text },
             alternate_intents: true
         };
-
+        console.log(infoUsuario)
         callWatson(payload, sender); //sender - id usuário facebook
     }
     res.sendStatus(200);
