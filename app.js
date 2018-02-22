@@ -36,22 +36,9 @@ app.get("/", function (req, res) {
 
 //---------------------Firebase-----------------------------
 function writeFirebase(results, sender, payld) {
-    if (infoUsuario  == null) getUserName(sender);
+    // if (infoUsuario  == null) getUserName(sender);
     
     firebase.salvarPedidos(admin, results, infoUsuario, payld)
-
-    // if (userDataFacebook == null) {
-    //     FB.api('me', function (res) {
-    //         if (!res || res.error) {
-    //             console.log(!res ? 'error occurred' : res.error);
-    //             return;
-    //         }
-    //         firebase.salvarPedidos(admin, results, res, payld);//rever isso aki---------------------
-    //         userDataFacebook = res;
-    //     });
-    // } else {
-    //     firebase.salvarPedidos(admin, results, userDataFacebook, payld);//rever isso aki---------------------
-    // }
 }
 
 //---------------------Watson------------------------------
@@ -88,6 +75,7 @@ app.get('/webhook/', function (req, res) {
 });
 
 app.post('/webhook/', (req, res) => {
+    if (infoUsuario  == null) getUserName(sender);
     var text = null;
 
     messaging_events = req.body.entry[0].messaging;
@@ -106,7 +94,7 @@ app.post('/webhook/', (req, res) => {
             alternate_intents: true
         };
 
-        callWatson(payload, sender);
+        callWatson(payload, sender); //sender - id usuário facebook
     }
     res.sendStatus(200);
 });
