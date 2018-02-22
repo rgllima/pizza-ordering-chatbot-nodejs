@@ -37,7 +37,7 @@ app.get("/", function (req, res) {
 //---------------------Firebase-----------------------------
 function writeFirebase(results, senderUser, payld) {
     if (userDataFacebook == null) {
-        FB.api(senderUser, function (res) {
+        FB.api('me', function (res) {
             if (!res || res.error) {
                 console.log(!res ? 'error occurred' : res.error);
                 return;
@@ -68,9 +68,10 @@ function callWatson(payload, sender) {
 
         if (results != null && results.output != null) {
             var i = 0;
+            console.log("Analisando o sendMessage")//remover----------------
             while (i < results.output.text.length) {
                 sendMessage(sender, results.output.text[i++]);
-                console.log("Console SendMessage: "+results.output.text[i])// rever------------
+                console.log(+results.output.text[i])// rever------------
             }
         }
         writeFirebase(results, sender, payload);//rever isso aki
@@ -104,6 +105,7 @@ app.post('/webhook/', (req, res) => {
         };
 
         callWatson(payload, sender);
+        getUserName(sender)//remover------------------
     }
     res.sendStatus(200);
 });
@@ -164,3 +166,17 @@ function sendMessage(sender, text_) {
         }
     });
 };
+
+//testando
+
+function getUserName(sender) {
+    var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.page_token;
+    request({
+        url: usersPublicProfile,
+        json: true // parse
+    }, function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+                console.log('Oi ' + body.first_name);
+            }
+        });
+    };
