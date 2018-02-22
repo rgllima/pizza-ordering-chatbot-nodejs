@@ -38,7 +38,7 @@ app.get("/", function (req, res) {
 function writeFirebase(results, sender, payld) {
     if (infoUsuario  == null) getUserName(sender);
     
-    firebase.salvarPedidos(admin, results, userInfo, payld)
+    firebase.salvarPedidos(admin, results, infoUsuario, payld)
 
     // if (userDataFacebook == null) {
     //     FB.api('me', function (res) {
@@ -171,15 +171,13 @@ function sendMessage(sender, text_) {
 //testando
 
 function getUserName(sender) {
-    var userInfo = null
     var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.FB_TOKEN;
     request({
         url: usersPublicProfile,
         json: true // parse
     }, (error, response, body) => {
         if (!error && response.statusCode === 200) {
-                userInfo = body;
+                infoUsuario = body;
         }
     });
-    return userInfo;
 };
