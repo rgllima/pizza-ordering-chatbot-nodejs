@@ -109,7 +109,6 @@ app.post('/webhook/', (req, res) => {
         };
 
         callWatson(payload, sender);
-        getUserName(sender)//remover------------------
     }
     res.sendStatus(200);
 });
