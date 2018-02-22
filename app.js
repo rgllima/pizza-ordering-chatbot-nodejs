@@ -37,6 +37,8 @@ app.get("/", function (req, res) {
 //---------------------Firebase-----------------------------
 function writeFirebase(results, sender, payld) {
     var userInfo = getUserName(sender);
+    console.log("UserInfo")
+    console.log(userInfo)
     firebase.salvarPedidos(admin, results, userInfo, payld)
 
     // if (userDataFacebook == null) {
