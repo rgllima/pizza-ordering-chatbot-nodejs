@@ -60,7 +60,11 @@ function callWatson(payload, sender) {
         if (results != null && results.output != null) {
             var i = 0;
             while (i < results.output.text.length) {
-                sendMessage(sender, results.output.text[i++]);
+                // sendMessage(sender, results.output.text[i++]);
+
+                //testando o envio de respostas personalizadas
+                if (results.intents[0].intent == "pedir_pizza") buildCardMessage(sender);
+                else buildTextMessage(sender, results.output.text[i++]);
             }
         }
         writeFirebase(results, sender, payload);//rever isso aki
@@ -82,7 +86,7 @@ app.post('/webhook/', (req, res) => {
         event = req.body.entry[0].messaging[i];
         sender = event.sender.id;
 
-        if (infoUsuario  == null) getUserName(sender); //pegar as informações do usuário
+        if (infoUsuario  == null) getUserInfo(sender); //pegar as informações do usuário
 
         if (event.message && event.message.text) text = event.message.text;
         else if (event.postback && !text) text = event.postback.payload;
@@ -94,51 +98,18 @@ app.post('/webhook/', (req, res) => {
             input: { "text": text },
             alternate_intents: true
         };
-        console.log(infoUsuario)
+
         callWatson(payload, sender); //sender - id usuário facebook
     }
     res.sendStatus(200);
 });
 
-function sendMessage(sender, text_) {
-    text_ = text_.substring(0, 319);
-//--------------------------------------------------------------------------------------
-// Remover
-    let messageDt = {
-	    "attachment": {
-		    "type": "template",
-		    "payload": {
-				"template_type": "generic",
-			    "elements": [{
-					"title": "Mussarela",
-				    "subtitle": "hoje estou só testando",
-				    "image_url": "https://goo.gl/N2Wb4t",
-				    "buttons": [{
-					    "type": "web_url",
-					    "url": "https://www.messenger.com",
-					    "title": "web url"
-				    }, {
-					    "type": "postback",
-					    "title": "Mussarela",
-					    "payload": "Payload for first element in a generic bubble",
-				    }],
-			    }, {
-				    "title": "Second card",
-				    "subtitle": "Element #2 of an hscroll",
-				    "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
-				    "buttons": [{
-					    "type": "postback",
-					    "title": "Postback",
-					    "payload": "Payload for second element in a generic bubble",
-				    }],
-			    }]
-		    }
-	    }
-    }
-    messageData = messageDt;
-    console.log({ text: text_ });//remover-------------
-//---------------------------------------------------------------
-//    messageData = { text: text_ };
+// function sendMessage(sender, text_) {
+//     text_ = text_.substring(0, 319);
+
+//     messageData = { text: text_ };
+
+function sendMessage(sender, messageData) {
 
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -159,14 +130,55 @@ function sendMessage(sender, text_) {
 
 //testando
 
-function getUserName(sender) {
+function getUserInfo(sender) {
     var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.FB_TOKEN;
     request({
         url: usersPublicProfile,
         json: true // parse
     }, (error, response, body) => {
         if (!error && response.statusCode === 200) {
-                infoUsuario = body;
+            infoUsuario = body;
         }
     });
 };
+
+function buildTextMessage(sender, text_) {
+    text_ = text_.substring(0, 319);
+
+    sendMessage(sender, { text: text_ }) 
+}
+
+function buildCardMessage(sender) {
+    let messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [{
+                    "title": "Mussarela",
+                    "subtitle": "hoje estou só testando",
+                    "image_url": "https://goo.gl/N2Wb4t",
+                    "buttons": [{
+                        "type": "web_url",
+                        "url": "https://www.messenger.com",
+                        "title": "web url"
+                    }, {
+                        "type": "postback",
+                        "title": "Mussarela",
+                        "payload": "Payload for first element in a generic bubble",
+                    }],
+                }, {
+                    "title": "Second card",
+                    "subtitle": "Element #2 of an hscroll",
+                    "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
+                    "buttons": [{
+                        "type": "postback",
+                        "title": "Postback",
+                        "payload": "Payload for second element in a generic bubble",
+                    }],
+                }]
+            }
+        }
+    }
+    sendMessage(sender, messageData);
+}
