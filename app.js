@@ -63,7 +63,10 @@ function callWatson(payload, sender) {
                 // sendMessage(sender, results.output.text[i++]);
 
                 //testando o envio de respostas personalizadas
-                if (results.intents[0].intent == "pedir_pizza") buildCardMessage(sender);
+                if (results.intents[0].intent == "pedir_pizza") {
+                    buildCardMessage(sender);
+                    break;
+                }
                 else buildTextMessage(sender, results.output.text[i++]);
             }
         }
