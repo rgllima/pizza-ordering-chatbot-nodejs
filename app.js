@@ -173,6 +173,7 @@ function sendMessage(sender, text_) {
 //testando
 
 function getUserName(sender) {
+    var userInfo = null
     var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.FB_TOKEN;
     request({
         url: usersPublicProfile,
@@ -183,6 +184,7 @@ function getUserName(sender) {
             }
             console.log('getUserName')
             console.log(body)
-            return body;
+            userInfo = body;
         });
+        return userInfo;
     };
