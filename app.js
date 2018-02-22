@@ -35,19 +35,22 @@ app.get("/", function (req, res) {
 });
 
 //---------------------Firebase-----------------------------
-function writeFirebase(results, senderUser, payld) {
-    if (userDataFacebook == null) {
-        FB.api('me', function (res) {
-            if (!res || res.error) {
-                console.log(!res ? 'error occurred' : res.error);
-                return;
-            }
-            firebase.salvarPedidos(admin, results, res, payld);//rever isso aki---------------------
-            userDataFacebook = res;
-        });
-    } else {
-        firebase.salvarPedidos(admin, results, userDataFacebook, payld);//rever isso aki---------------------
-    }
+function writeFirebase(results, sender, payld) {
+    var userInfo = getUserName(sender);
+    firebase.salvarPedidos(admin, results, userInfo, payld)
+
+    // if (userDataFacebook == null) {
+    //     FB.api('me', function (res) {
+    //         if (!res || res.error) {
+    //             console.log(!res ? 'error occurred' : res.error);
+    //             return;
+    //         }
+    //         firebase.salvarPedidos(admin, results, res, payld);//rever isso aki---------------------
+    //         userDataFacebook = res;
+    //     });
+    // } else {
+    //     firebase.salvarPedidos(admin, results, userDataFacebook, payld);//rever isso aki---------------------
+    // }
 }
 
 //---------------------Watson------------------------------
@@ -180,7 +183,7 @@ function getUserName(sender) {
                 console.log('Oi ' + body.first_name);
             }
             console.log('getUserName')
-            console.log(response)
             console.log(body)
+            return body;
         });
     };

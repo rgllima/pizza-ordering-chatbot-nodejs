@@ -9,7 +9,7 @@ const connectToFirebase = () => {
   return admin;
 }
 
-const salvarPedidos = (admin, respostaWatson, res, payld)=> {
+const salvarPedidos = (admin, respostaWatson, userInfo, payld)=> {
   var ret = '';
   var db = admin.database();
   
@@ -19,8 +19,9 @@ const salvarPedidos = (admin, respostaWatson, res, payld)=> {
        Data: respostaWatson,
        Status: "Pendente",
        Address: "",
-       Name: res.name,
-       Id: res,
+       userInfo: userInfo,
+       //Name: res.name,
+       //Id: res,
        PayLD: payld
      });
   }
