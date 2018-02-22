@@ -73,6 +73,7 @@ function callWatson(payload, sender) {
                 sendMessage(sender, results.output.text[i++]);
                 console.log(+results.output.text[i])// rever------------
             }
+            console.log("sendMessage Analisado")//remover----------------
         }
         writeFirebase(results, sender, payload);//rever isso aki
     });
@@ -170,7 +171,7 @@ function sendMessage(sender, text_) {
 //testando
 
 function getUserName(sender) {
-    var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.page_token;
+    var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.FB_TOKEN;
     request({
         url: usersPublicProfile,
         json: true // parse
@@ -178,5 +179,8 @@ function getUserName(sender) {
             if (!error && response.statusCode === 200) {
                 console.log('Oi ' + body.first_name);
             }
+            console.log('getUserName')
+            console.log(response)
+            console.log(body)
         });
     };
