@@ -1,3 +1,5 @@
+import { setTimeout } from 'timers';
+
 /*eslint-env node*/
 
 /**
@@ -53,7 +55,12 @@ var w_conversation = new Conversation({
 // function callWatson(payload, sender) {
 function callWatson(text, sender) { //testando com o async
 
-    if (infoUsuario  == null) infoUsuario = getUserInfo(sender); //pegar as informações do usuário
+    if (infoUsuario  == null) {
+        setTimeout(() => {
+            infoUsuario = getUserInfo(sender);
+        }, 1000);
+    }  //pegar as informações do usuário
+    
     
     console.log("Informações do Usuário");
     console.log(infoUsuario);
@@ -151,18 +158,17 @@ function sendMessage(sender, messageData) {
 
 //testando
 
-async function getUserInfo(sender) {
+function getUserInfo(sender) {
     var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.FB_TOKEN;
     var userInfo = null;
-    await request({
+    request({
         url: usersPublicProfile,
         json: true // parse
     }, (error, response, body) => {
         if (!error && response.statusCode === 200) {
-            userInfo = body;
+            return body;
         }
     });
-    return userInfo;
 };
 
 function buildTextMessage(sender, text_) {
