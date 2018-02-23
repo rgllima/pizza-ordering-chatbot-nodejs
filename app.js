@@ -51,9 +51,9 @@ var w_conversation = new Conversation({
 });
 
 // function callWatson(payload, sender) {
-async function callWatson(text, sender) { //testando com o async
+function callWatson(text, sender) { //testando com o async
 
-    if (infoUsuario  == null) infoUsuario =  await getUserInfo(sender); //pegar as informações do usuário
+    if (infoUsuario  == null) infoUsuario = getUserInfo(sender); //pegar as informações do usuário
     
     console.log("Informações do Usuário");
     console.log(infoUsuario);
@@ -151,9 +151,9 @@ function sendMessage(sender, messageData) {
 
 //testando
 
-function getUserInfo(sender) {
+async function getUserInfo(sender) {
     var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.FB_TOKEN;
-    request({
+    await request({
         url: usersPublicProfile,
         json: true // parse
     }, (error, response, body) => {
