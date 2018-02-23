@@ -56,7 +56,7 @@ function callWatson(text, sender) { //testando com o async
 
     var payload = {
         workspace_id: process.env.WORKSPACE_ID,
-        context: contexto_atual || {"name":"rafael"},//rever isso aki-------------
+        context: contexto_atual || {"nomeUser":infoUsuario.first_name},//rever isso aki-------------
         input: { "text": text },
         alternate_intents: true
     };
@@ -124,7 +124,8 @@ app.post('/webhook/', (req, res) => {
                 console.log(infoUsuario)
                 callWatson(text, sender);
             }, 1500);
-        }  //pegar as informações do usuário
+        }
+        else callWatson(text, sender)  //pegar as informações do usuário
         
         
         
