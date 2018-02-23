@@ -153,14 +153,16 @@ function sendMessage(sender, messageData) {
 
 async function getUserInfo(sender) {
     var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.FB_TOKEN;
+    var userInfo = null;
     await request({
         url: usersPublicProfile,
         json: true // parse
     }, (error, response, body) => {
         if (!error && response.statusCode === 200) {
-            return body;
+            userInfo = body;
         }
     });
+    return userInfo;
 };
 
 function buildTextMessage(sender, text_) {
