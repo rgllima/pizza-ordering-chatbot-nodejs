@@ -1,5 +1,3 @@
-import { setTimeout } from 'timers';
-
 /*eslint-env node*/
 
 /**
