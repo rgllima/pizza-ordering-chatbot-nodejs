@@ -51,7 +51,13 @@ var w_conversation = new Conversation({
 });
 
 // function callWatson(payload, sender) {
-function callWatson(text, sender) {
+function callWatson(text, sender) { //testando com o async
+
+    if (infoUsuario  == null) getUserInfo(sender); //pegar as informações do usuário
+
+    console.log("Informações do Usuário");
+    console.log(infoUsuario);
+
     var payload = {
         workspace_id: process.env.WORKSPACE_ID,
         context: contexto_atual || {},
@@ -111,8 +117,8 @@ app.post('/webhook/', (req, res) => {
         // callWatson(payload, sender); //sender - id usuário facebook
 //-----------------------------------------------------------------------------
                                 //ZONA DE TESTES
-        if (infoUsuario  == null) getUserInfo(sender, callWatson(text, sender)); //pegar as informações do usuário
-        else callWatson(text, sender);
+        // if (infoUsuario  == null) getUserInfo(sender, callWatson(text, sender)); //pegar as informações do usuário
+        callWatson(text, sender);
 
 //-----------------------------------------------------------------------------
     }
@@ -145,7 +151,7 @@ function sendMessage(sender, messageData) {
 
 //testando
 
-function getUserInfo(sender, callback) {
+function getUserInfo(sender) {
     var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.FB_TOKEN;
     request({
         url: usersPublicProfile,
@@ -155,7 +161,6 @@ function getUserInfo(sender, callback) {
             infoUsuario = body;
         }
     });
-    callback();
 };
 
 function buildTextMessage(sender, text_) {
