@@ -52,6 +52,7 @@ var w_conversation = new Conversation({
 
 // function callWatson(payload, sender) {
 function callWatson(text, sender) { //testando com o async
+    console.log("Entrei em callWatson")
 
     var payload = {
         workspace_id: process.env.WORKSPACE_ID,
@@ -115,15 +116,18 @@ app.post('/webhook/', (req, res) => {
         // if (infoUsuario  == null) getUserInfo(sender, callWatson(text, sender)); //pegar as informações do usuário
         
         if (infoUsuario  == null) {
-            infoUsuario = getUserInfo(sender);
+            getUserInfo(sender);
+            console.log("Vamos esperar")
             setTimeout(() => {
+                console.log("Foi")
                 callWatson(text, sender);
+                console.log("Informações do Usuário");
+                console.log(infoUsuario)
             }, 1500);
         }  //pegar as informações do usuário
         
         
-        console.log("Informações do Usuário");
-        console.log(infoUsuario)
+        
         
         
 
@@ -160,13 +164,12 @@ function sendMessage(sender, messageData) {
 
 function getUserInfo(sender) {
     var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.FB_TOKEN;
-    var userInfo = null;
     request({
         url: usersPublicProfile,
         json: true // parse
     }, (error, response, body) => {
         if (!error && response.statusCode === 200) {
-            return body;
+            infoUsuario = body;
         }
     });
 };
