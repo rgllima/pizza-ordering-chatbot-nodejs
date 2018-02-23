@@ -51,10 +51,10 @@ var w_conversation = new Conversation({
 });
 
 // function callWatson(payload, sender) {
-function callWatson(text, sender) { //testando com o async
+async function callWatson(text, sender) { //testando com o async
 
-    if (infoUsuario  == null) getUserInfo(sender); //pegar as informações do usuário
-
+    if (infoUsuario  == null) await getUserInfo(sender); //pegar as informações do usuário
+    
     console.log("Informações do Usuário");
     console.log(infoUsuario);
 
