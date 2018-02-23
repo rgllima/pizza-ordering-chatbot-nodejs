@@ -53,16 +53,6 @@ var w_conversation = new Conversation({
 // function callWatson(payload, sender) {
 function callWatson(text, sender) { //testando com o async
 
-    if (infoUsuario  == null) {
-        setTimeout(() => {
-            infoUsuario = getUserInfo(sender);
-        }, 1000);
-    }  //pegar as informações do usuário
-    
-    
-    console.log("Informações do Usuário");
-    console.log(infoUsuario);
-
     var payload = {
         workspace_id: process.env.WORKSPACE_ID,
         context: contexto_atual || {},
@@ -123,7 +113,19 @@ app.post('/webhook/', (req, res) => {
 //-----------------------------------------------------------------------------
                                 //ZONA DE TESTES
         // if (infoUsuario  == null) getUserInfo(sender, callWatson(text, sender)); //pegar as informações do usuário
-        callWatson(text, sender);
+        
+        if (infoUsuario  == null) {
+            infoUsuario = getUserInfo(sender);
+            setTimeout(() => {
+                callWatson(text, sender);
+            }, 1500);
+        }  //pegar as informações do usuário
+        
+        
+        console.log("Informações do Usuário");
+        console.log(infoUsuario)
+        
+        
 
 //-----------------------------------------------------------------------------
     }
