@@ -53,7 +53,7 @@ var w_conversation = new Conversation({
 // function callWatson(payload, sender) {
 async function callWatson(text, sender) { //testando com o async
 
-    if (infoUsuario  == null) await getUserInfo(sender); //pegar as informações do usuário
+    if (infoUsuario  == null) infoUsuario =  await getUserInfo(sender); //pegar as informações do usuário
     
     console.log("Informações do Usuário");
     console.log(infoUsuario);
@@ -158,7 +158,7 @@ function getUserInfo(sender) {
         json: true // parse
     }, (error, response, body) => {
         if (!error && response.statusCode === 200) {
-            infoUsuario = body;
+            return body;
         }
     });
 };
