@@ -21,7 +21,9 @@ var Conversation = require('watson-developer-cloud/conversation/v1');
 // app.use(express.static(__dirname + '/public'));
 
 var app = express();
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({
+    extended: false
+}))
 app.use(bodyParser.json())
 // start server on the specified port and binding host
 app.listen(process.env.PORT || 5000, () => console.log('webhook está ouvindo'));
@@ -35,7 +37,7 @@ app.get("/", function (req, res) {
 });
 
 //---------------------Firebase-----------------------------
-function writeFirebase(results, payld) {    
+function writeFirebase(results, payld) {
     firebase.salvarPedidos(admin, results, infoUsuario, payld)
 }
 
@@ -54,8 +56,12 @@ function callWatson(text, sender) { //testando com o async
 
     var payload = {
         workspace_id: process.env.WORKSPACE_ID,
-        context: contexto_atual || {"nomeUser":infoUsuario.first_name},//rever isso aki-------------
-        input: { "text": text },
+        context: contexto_atual || {
+            "nomeUser": infoUsuario.first_name
+        }, //rever isso aki-------------
+        input: {
+            "text": text
+        },
         alternate_intents: true
     };
 
@@ -72,12 +78,11 @@ function callWatson(text, sender) { //testando com o async
                 if (results.intents[0].intent == "pedir_pizza") {
                     buildCardMessage(sender);
                     break;
-                }
-                else buildTextMessage(sender, results.output.text[i++]);
+                } else buildTextMessage(sender, results.output.text[i++]);
             }
         }
-        writeFirebase(results, payload);//rever isso aki
-        firebase.setUserInfoInFirebase(admin, infoUsuario, contexto_atual);//salvar contexto da conversa e info usuário no firebase
+        writeFirebase(results, payload); //rever isso aki
+        firebase.setUserInfoInFirebase(admin, infoUsuario, contexto_atual); //salvar contexto da conversa e info usuário no firebase
     });
 }
 
@@ -106,8 +111,8 @@ app.post('/webhook/', (req, res) => {
         //     input: { "text": text },
         //     alternate_intents: true
         // };
-        
-        if (infoUsuario  == null || sender != infoUsuario.id) {
+
+        if (infoUsuario == null || sender != infoUsuario.id) {
             getUserInfo(sender);
 
             console.log("Contexto Atual Antes");
@@ -117,17 +122,16 @@ app.post('/webhook/', (req, res) => {
                 contexto_atual = contextWt;
             }); //buscar contexto da conversa no firebase
 
-            setTimeout(() => {                
+            setTimeout(() => {
                 // contexto_atual = firebase.getContext;// pega o valor do contexto buscado na função getUserInfoInFirebase
 
                 console.log("Contexto Atual Depois");
                 console.log(contexto_atual);
                 callWatson(text, sender);
             }, 1500);
-        }
-        else callWatson(text, sender)  //pegar as informações do usuário
-        
-//-----------------------------------------------------------------------------
+        } else callWatson(text, sender) //pegar as informações do usuário
+
+        //-----------------------------------------------------------------------------
     }
     res.sendStatus(200);
 });
@@ -136,10 +140,14 @@ function sendMessage(sender, messageData) {
 
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: { access_token: process.env.FB_TOKEN },
+        qs: {
+            access_token: process.env.FB_TOKEN
+        },
         method: 'POST',
         json: {
-            recipient: { id: sender },
+            recipient: {
+                id: sender
+            },
             message: messageData,
         }
     }, function (error, response, body) {
@@ -168,7 +176,9 @@ function getUserInfo(sender) {
 function buildTextMessage(sender, text_) {
     text_ = text_.substring(0, 319);
 
-    sendMessage(sender, { text: text_ }) 
+    sendMessage(sender, {
+        text: text_
+    })
 }
 
 function buildCardMessage(sender) {
@@ -204,4 +214,22 @@ function buildCardMessage(sender) {
         }
     }
     sendMessage(sender, messageData);
+}
+
+/*
+ * Send an image using the Send API.
+ *
+ */
+function sendImageMessage(sender) {
+    var messageData = {
+        attachment: {
+            type: "image",
+            payload: {
+                url: infoUsuario.profile_pic
+            }
+        }
+    }
+};
+
+sendMessage(sender, messageData);
 }
