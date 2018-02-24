@@ -226,10 +226,10 @@ function buildCardMessage(sender) {
  */
 function sendImageMessage(sender) {
     var messageData = {
-        attachment: {
-            type: "image",
-            payload: {
-                url: infoUsuario.profile_pic
+        "attachment": {
+            "type": "image",
+            "payload": {
+                "url": infoUsuario.profile_pic
             }
         }
     }
