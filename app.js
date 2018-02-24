@@ -145,7 +145,6 @@ function sendMessage(sender, messageData) {
             recipient: {
                 id: sender
             },
-            sender_action: "typing_on",
             message: messageData,
         }
     }, function (error, response, body) {
@@ -250,10 +249,24 @@ function buildButtonMessage(recipientId, text, buttons) {
  *
  */
 function sendTypingOn(sender) {
-
-	var messageData = {
-		"sender_action": "typing_on"
-	};
-
-	sendMessage(sender, messageData);;
+    
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {
+            access_token: process.env.FB_TOKEN
+        },
+        method: 'POST',
+        json: {
+            recipient: {
+                id: sender
+            },
+            sender_action: "typing_on",
+        }
+    }, function (error, response, body) {
+        if (error) {
+            console.log('Erro no envio da mensagem ', error);
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error);
+        }
+    });
 }
