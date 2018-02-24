@@ -38,29 +38,29 @@ const setUserInfoInFirebase = (admin, userInfo, contextWatson) => {
 
 const getUserInfoInFirebase = (admin, idUser) => {
   var db = admin.database();
-  try {
-    db.ref("/clientes/" + idUser).once("value", (snapshot)=> {
-      console.log("InfoUserBaixado");
-      console.log(snapshot.val().last_context_dialog);
+  // try {
+  //   db.ref("/clientes/" + idUser).once("value", (snapshot)=> {
+  //     console.log("InfoUserBaixado");
+  //     console.log(snapshot.val().last_context_dialog);
       
-      return snapshot.val().last_context_dialog;
-    });
-  } catch (error) {
-    console.log("InfoUser Não Baixado - Erro");
-    console.log(error);
-    return null;
-  }
-
-  // db.ref("/clientes/" + idUser).once("value", (snapshot)=> {
-  //   console.log("InfoUserBaixado");
-  //   console.log(snapshot.val().last_context_dialog);
-    
-  //   return snapshot.val().last_context_dialog;
-  // }, (errorObject)=>{
+  //     return snapshot.val().last_context_dialog;
+  //   });
+  // } catch (error) {
   //   console.log("InfoUser Não Baixado - Erro");
-  //   console.log(errorObject.code);
+  //   console.log(error);
   //   return null;
-  // });
+  // }
+
+  db.ref("/clientes/" + idUser + "last_context_dialog").once("value", (snapshot)=> {
+    console.log("InfoUserBaixado");
+    console.log(snapshot.val());
+    
+    return snapshot.val();
+  }, (errorObject)=>{
+    console.log("InfoUser Não Baixado - Erro");
+    console.log(errorObject.code);
+    return null;
+  });
 }
 
 module.exports = {
