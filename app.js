@@ -110,7 +110,7 @@ app.post('/webhook/', (req, res) => {
         if (infoUsuario  == null || sender != infoUsuario.id) {
             getUserInfo(sender);
 
-            contexto_atual = JSON.parse(firebase.getUserInfoInFirebase(admin, sender)); //buscar contexto da conversa no firebase
+            contexto_atual = firebase.getUserInfoInFirebase(admin, sender); //buscar contexto da conversa no firebase
 
             console.log("idUser: " + sender)
 
