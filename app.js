@@ -82,7 +82,8 @@ function callWatson(text, sender) { //testando com o async
                     console.log("\n\nEnviar foto\n\n");
                     sendImageMessage(sender);
                     break;
-                } else buildTextMessage(sender, results.output.text[i++]);
+                }
+                else buildTextMessage(sender, results.output.text[i++]);
             }
         }
         writeFirebase(results, payload); //rever isso aki
@@ -218,10 +219,7 @@ function sendImageMessage(sender) {
         "attachment": {
             "type": "image",
             "payload": {
-                "template_type": "generic",
-                "elements": [{
-                    "image_url": "https://goo.gl/N2Wb4t"
-                }]
+                "url": "https://goo.gl/N2Wb4t"
             }
         }
     }
