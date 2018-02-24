@@ -38,26 +38,15 @@ const setUserInfoInFirebase = (admin, userInfo, contextWatson) => {
 
 const getUserInfoInFirebase = (admin, idUser) => {
   var db = admin.database();
-  db.ref("/clientes/" + id).once("value", (snapshot)=> {
+  db.ref("/clientes/" + idUser).once("value", (snapshot)=> {
     console.log("InfoUserBaixado");
     console.log(snapshot.val().last_context_dialog);
     
     return snapshot.val().last_context_dialog;
   }, (errorObject)=>{
     console.log("InfoUser Não Baixado - Erro");
-    console.log(errorObject);
-    
+    console.log(errorObject.code);
     return null;
-  })
-
-
-  var ref = db.ref("server/saving-data/fireblog/posts");
-
-  // Attach an asynchronous callback to read the data at our posts reference
-  ref.on("value", function (snapshot) {
-    console.log(snapshot.val());
-  }, function (errorObject) {
-    console.log("The read failed: " + errorObject.code);
   });
 }
 
