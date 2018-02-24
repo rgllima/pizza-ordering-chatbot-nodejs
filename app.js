@@ -74,12 +74,15 @@ function callWatson(text, sender) { //testando com o async
         if (results != null && results.output != null) {
             var i = 0;
             while (i < results.output.text.length) {
+                console.log("\n" + results.intents[0].intent + "\n");//-----------------------------------------
+                
                 //enviando respostas personalizadas
                 if (results.intents[0].intent == "pedir_pizza") {
+                    console.log("\n\nEnviar card\n\n");//-------------------------------------------------
                     buildCardMessage(sender);
                     break;
                 } else if (results.intents[0].intent == "ver_foto") {
-                    console.log("\n\nEnviar foto\n\n");
+                    console.log("\n\nEnviar foto\n\n");//--------------------------------------------------
                     sendImageMessage(sender);
                     break;
                 }
@@ -219,7 +222,7 @@ function sendImageMessage(sender) {
         "attachment": {
             "type": "image",
             "payload": {
-                "url": "https://goo.gl/N2Wb4t"
+                "url": infoUsuario.profile_pic
             }
         }
     }
