@@ -43,7 +43,9 @@ const getUserInfoInFirebase = (admin, idUser) => {
     console.log("InfoUserBaixado");
     console.log(snapshot.val());
     
-    return JSON.stringfy(snapshot.val());
+    return JSON.stringify(snapshot.val());
+    // var dataReturn = JSON.stringfy(snapshot.val());
+    // return dataReturn;
   }, (errorObject)=>{
     console.log("InfoUser Não Baixado - Erro");
     console.log(errorObject.code);
