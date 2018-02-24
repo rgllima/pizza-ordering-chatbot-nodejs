@@ -110,7 +110,7 @@ app.post('/webhook/', (req, res) => {
         else if (event.postback && !text) text = event.postback.payload;
         else break;
 
-      //  sendTypingOn(sender); // sinalização de que o bot está digitando
+        sendTypingOn(sender); // sinalização de que o bot está digitando
 
         if (infoUsuario == null || sender != infoUsuario.id) {
             getUserInfo(sender);
@@ -249,7 +249,7 @@ function buildButtonMessage(recipientId, text, buttons) {
  *
  */
 function sendTypingOn(sender) {
-    
+
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {
