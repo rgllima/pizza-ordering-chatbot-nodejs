@@ -110,7 +110,7 @@ app.post('/webhook/', (req, res) => {
         else if (event.postback && !text) text = event.postback.payload;
         else break;
 
-        sendTypingOn(sender); // sinalização de que o bot está digitando
+      //  sendTypingOn(sender); // sinalização de que o bot está digitando
 
         if (infoUsuario == null || sender != infoUsuario.id) {
             getUserInfo(sender);
@@ -145,6 +145,7 @@ function sendMessage(sender, messageData) {
             recipient: {
                 id: sender
             },
+            sender_action: "typing_on",
             message: messageData,
         }
     }, function (error, response, body) {
