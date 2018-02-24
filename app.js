@@ -112,13 +112,12 @@ app.post('/webhook/', (req, res) => {
 
             contexto_atual = firebase.getUserInfoInFirebase(admin, sender); //buscar contexto da conversa no firebase
 
-            console.log("Vamos esperar")
+            console.log("idUser: " + sender)
 
             setTimeout(() => {
-                console.log("Foi")
-                console.log("Informações do Usuário");
+                console.log("Informações do Usuário dentro do setTimeout");
                 console.log(infoUsuario)
-                
+
                 callWatson(text, sender);
             }, 1500);
         }

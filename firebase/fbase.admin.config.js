@@ -31,27 +31,15 @@ const setUserInfoInFirebase = (admin, userInfo, contextWatson) => {
   db.ref("/clientes/" + id).set({
     last_context_dialog: contextWatson,
     dataUser: userInfo,
-    history_order: null,
-    last_order: null
+    history_order: '',
+    last_order: ''
   });
 }
 
 const getUserInfoInFirebase = (admin, idUser) => {
   var db = admin.database();
-  // try {
-  //   db.ref("/clientes/" + idUser).once("value", (snapshot)=> {
-  //     console.log("InfoUserBaixado");
-  //     console.log(snapshot.val().last_context_dialog);
-      
-  //     return snapshot.val().last_context_dialog;
-  //   });
-  // } catch (error) {
-  //   console.log("InfoUser Não Baixado - Erro");
-  //   console.log(error);
-  //   return null;
-  // }
 
-  db.ref("/clientes/" + idUser + "last_context_dialog").once("value", (snapshot)=> {
+  db.ref("/clientes/" + idUser + "/last_context_dialog").once("value", (snapshot)=> {
     console.log("InfoUserBaixado");
     console.log(snapshot.val());
     
