@@ -78,7 +78,11 @@ function callWatson(text, sender) { //testando com o async
                 if (results.intents[0].intent == "pedir_pizza") {
                     buildCardMessage(sender);
                     break;
-                } else buildTextMessage(sender, results.output.text[i++]);
+                } else if (results.intents[0].intent == "ver_foto") {
+                    sendImageMessage(sender);
+                    break;
+                }
+                else buildTextMessage(sender, results.output.text[i++]);
             }
         }
         writeFirebase(results, payload); //rever isso aki
@@ -229,7 +233,5 @@ function sendImageMessage(sender) {
             }
         }
     }
+    sendMessage(sender, messageData);
 };
-
-sendMessage(sender, messageData);
-}
