@@ -1,3 +1,5 @@
+let getContext = null;
+
 const connectToFirebase = () => {
   var admin = require("firebase-admin");
   var serviceAccount = require("./serviceAccountKey.json");
@@ -43,11 +45,10 @@ const getUserInfoInFirebase = (admin, idUser) => {
     console.log("InfoUserBaixado");
     console.log(snapshot.val());
     
-    return snapshot.val();
+    getContext = snapshot.val();
   }, (errorObject)=>{
     console.log("InfoUser Não Baixado - Erro");
     console.log(errorObject.code);
-    return null;
   });
 }
 
@@ -55,5 +56,6 @@ module.exports = {
   connectToFirebase,
   salvarPedidos,
   setUserInfoInFirebase,
-  getUserInfoInFirebase
+  getUserInfoInFirebase,
+  getContext
 }
