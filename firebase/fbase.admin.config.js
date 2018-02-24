@@ -38,14 +38,15 @@ const setUserInfoInFirebase = (admin, userInfo, contextWatson) => {
   });
 }
 
-const getUserInfoInFirebase = (admin, idUser) => {
+const getUserInfoInFirebase = (admin, idUser, callBack) => {
   var db = admin.database();
 
-  db.ref("/clientes/" + idUser + "/last_context_dialog").once("value", (snapshot)=> {
+  db.ref("/clientes/" + idUser + "/last_context_dialog").once("value", (snapshot) => {
     console.log("InfoUserBaixado");
     console.log(snapshot.val());
     
-    getContext = snapshot.val();
+    // getContext = snapshot.val();
+    callBack(snapshot.val())
   }, (errorObject)=>{
     console.log("InfoUser Não Baixado - Erro");
     console.log(errorObject.code);
