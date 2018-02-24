@@ -218,7 +218,7 @@ function sendImageMessage(sender) {
         "attachment": {
             "type": "image",
             "payload": {
-                "url": "https://goo.gl/N2Wb4t"
+                "image_url": "https://goo.gl/N2Wb4t"
             }
         }
     }
