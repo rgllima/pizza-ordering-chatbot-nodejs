@@ -74,19 +74,16 @@ function callWatson(text, sender) { //testando com o async
         if (results != null && results.output != null) {
             var i = 0;
             while (i < results.output.text.length) {
-                console.log("\n" + results.intents[0].intent + "\n");//-----------------------------------------
-                
+                console.log("\n Intenção: " + results.intents[0].intent + "\n"); //-----------------------------------------
+
                 //enviando respostas personalizadas
                 if (results.intents[0].intent == "pedir_pizza") {
-                    console.log("\n\nEnviar card\n\n");//-------------------------------------------------
                     buildCardMessage(sender);
                     break;
                 } else if (results.intents[0].intent == "ver_foto") {
-                    console.log("\n\nEnviar foto\n\n");//--------------------------------------------------
                     sendImageMessage(sender);
                     break;
-                }
-                else buildTextMessage(sender, results.output.text[i++]);
+                } else buildTextMessage(sender, results.output.text[i++]);
             }
         }
         writeFirebase(results, payload); //rever isso aki
@@ -113,6 +110,8 @@ app.post('/webhook/', (req, res) => {
         else if (event.postback && !text) text = event.postback.payload;
         else break;
 
+        sendTypingOn(sender); // sinalização de que o bot está digitando
+
         if (infoUsuario == null || sender != infoUsuario.id) {
             getUserInfo(sender);
 
@@ -128,10 +127,11 @@ app.post('/webhook/', (req, res) => {
             }, 1500);
         } else callWatson(text, sender) //pegar as informações do usuário
 
-        //-----------------------------------------------------------------------------
     }
     res.sendStatus(200);
 });
+
+//------------------------------- ----------------------------------------
 
 function sendMessage(sender, messageData) {
 
@@ -155,8 +155,6 @@ function sendMessage(sender, messageData) {
         }
     });
 };
-
-//testando
 
 function getUserInfo(sender) {
     var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.FB_TOKEN;
@@ -228,3 +226,33 @@ function sendImageMessage(sender) {
     }
     sendMessage(sender, messageData);
 };
+
+/*
+ * Send a button message using the Send API.
+ *
+ */
+function buildButtonMessage(recipientId, text, buttons) {
+    var messageData = {
+        attachment: {
+            "type": "template",
+            "payload": {
+                "template_type": "button",
+                "text": text,
+                "buttons": buttons
+            }
+        }
+    }
+};
+
+/*
+ * Turn typing indicator on
+ *
+ */
+function sendTypingOn(sender) {
+
+	var messageData = {
+		"sender_action": "typing_on"
+	};
+
+	sendMessage(sender, messageData);;
+}

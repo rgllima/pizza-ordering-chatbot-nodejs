@@ -92,53 +92,6 @@ function sendFileMessage(recipientId, fileName) {
 	callSendAPI(messageData);
 }
 
-
-
-/*
- * Send a button message using the Send API.
- *
- */
-function sendButtonMessage(recipientId, text, buttons) {
-	var messageData = {
-		recipient: {
-			id: recipientId
-		},
-		message: {
-			attachment: {
-				type: "template",
-				payload: {
-					template_type: "button",
-					text: text,
-					buttons: buttons
-				}
-			}
-		}
-	};
-
-	callSendAPI(messageData);
-}
-
-
-function sendGenericMessage(recipientId, elements) {
-	var messageData = {
-		recipient: {
-			id: recipientId
-		},
-		message: {
-			attachment: {
-				type: "template",
-				payload: {
-					template_type: "generic",
-					elements: elements
-				}
-			}
-		}
-	};
-
-	callSendAPI(messageData);
-}
-
-
 function sendReceiptMessage(recipientId, recipient_name, currency, payment_method,
 							timestamp, elements, address, summary, adjustments) {
 	// Generate a random receipt ID as the API requires a unique ID
