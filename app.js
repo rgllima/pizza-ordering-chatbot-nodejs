@@ -79,10 +79,10 @@ function callWatson(text, sender) { //testando com o async
                     buildCardMessage(sender);
                     break;
                 } else if (results.intents[0].intent == "ver_foto") {
+                    console.log("\n\nEnviar foto\n\n");
                     sendImageMessage(sender);
                     break;
-                }
-                else buildTextMessage(sender, results.output.text[i++]);
+                } else buildTextMessage(sender, results.output.text[i++]);
             }
         }
         writeFirebase(results, payload); //rever isso aki
@@ -218,7 +218,10 @@ function sendImageMessage(sender) {
         "attachment": {
             "type": "image",
             "payload": {
-                "image_url": "https://goo.gl/N2Wb4t"
+                "template_type": "generic",
+                "elements": [{
+                    "image_url": "https://goo.gl/N2Wb4t"
+                }]
             }
         }
     }
