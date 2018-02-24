@@ -31,6 +31,8 @@ app.listen(process.env.PORT || 5000, () => console.log('webhook está ouvindo'))
 var infoUsuario = null;
 var contexto_atual = null;
 
+getStarted()
+
 // remover isso aki
 app.get("/", function (req, res) {
     res.send("Deployed!");
@@ -106,11 +108,12 @@ app.post('/webhook/', (req, res) => {
         event = req.body.entry[0].messaging[i];
         sender = event.sender.id;
 
+        sendTypingOn(sender); // sinalização de que o bot está digitando
+
         if (event.message && event.message.text) text = event.message.text;
         else if (event.postback && !text) text = event.postback.payload;
         else break;
 
-        sendTypingOn(sender); // sinalização de que o bot está digitando
 
         if (infoUsuario == null || sender != infoUsuario.id) {
             getUserInfo(sender);
@@ -243,7 +246,6 @@ function buildButtonMessage(recipientId, text, buttons) {
         }
     }
 };
-
 /*
  * Turn typing indicator on
  *
@@ -261,6 +263,31 @@ function sendTypingOn(sender) {
                 id: sender
             },
             sender_action: "typing_on",
+        }
+    }, function (error, response, body) {
+        if (error) {
+            console.log('Erro no envio da mensagem ', error);
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error);
+        }
+    });
+}
+/*
+ * botão iniciar conversa
+ *
+ */
+function getStarted() {
+
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {
+            access_token: process.env.FB_TOKEN
+        },
+        method: 'POST',
+        json: {
+            "get_started":{
+                "payload":"<GET_STARTED_PAYLOAD>"
+            }
         }
     }, function (error, response, body) {
         if (error) {
