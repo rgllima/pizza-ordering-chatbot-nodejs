@@ -44,8 +44,8 @@ const getUserInfoInFirebase = (admin, idUser) => {
     
     return snapshot.val().last_context_dialog;
   }, (errorObject)=>{
-    .console.log("InfoUser Não Baixado - Erro");
-    .console.log(errorObject);
+    console.log("InfoUser Não Baixado - Erro");
+    console.log(errorObject);
     
     return null;
   })
