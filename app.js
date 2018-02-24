@@ -109,27 +109,16 @@ app.post('/webhook/', (req, res) => {
         else if (event.postback && !text) text = event.postback.payload;
         else break;
 
-        // var payload = {
-        //     workspace_id: process.env.WORKSPACE_ID,
-        //     context: contexto_atual || {},
-        //     input: { "text": text },
-        //     alternate_intents: true
-        // };
-
         if (infoUsuario == null || sender != infoUsuario.id) {
             getUserInfo(sender);
-
-            console.log("Contexto Atual Antes");
-            console.log(contexto_atual);
 
             firebase.getUserInfoInFirebase(admin, sender, (contextWt) => {
                 contexto_atual = contextWt;
             }); //buscar contexto da conversa no firebase
 
             setTimeout(() => {
-                // contexto_atual = firebase.getContext;// pega o valor do contexto buscado na função getUserInfoInFirebase
 
-                console.log("Contexto Atual Depois");
+                console.log("Contexto Atual");
                 console.log(contexto_atual);
                 callWatson(text, sender);
             }, 1500);
@@ -229,7 +218,7 @@ function sendImageMessage(sender) {
         "attachment": {
             "type": "image",
             "payload": {
-                "url": infoUsuario.profile_pic
+                "url": "https://goo.gl/N2Wb4t"
             }
         }
     }
