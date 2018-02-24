@@ -24,7 +24,7 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 // start server on the specified port and binding host
-app.listen(process.env.PORT || 5000);
+app.listen(process.env.PORT || 5000, () => console.log('webhook está ouvindo'));
 
 var infoUsuario = null;
 var contexto_atual = null;
@@ -35,9 +35,7 @@ app.get("/", function (req, res) {
 });
 
 //---------------------Firebase-----------------------------
-function writeFirebase(results, sender, payld) {
-    // if (infoUsuario  == null) getUserName(sender);
-    
+function writeFirebase(results, payld) {    
     firebase.salvarPedidos(admin, results, infoUsuario, payld)
 }
 
@@ -78,7 +76,8 @@ function callWatson(text, sender) { //testando com o async
                 else buildTextMessage(sender, results.output.text[i++]);
             }
         }
-        writeFirebase(results, sender, payload);//rever isso aki
+        writeFirebase(results, payload);//rever isso aki
+        firebase.setUserInfoInFirebase(admin, infoUsuario, contexto_atual);//salvar contexto da conversa e info usuário no firebase
     });
 }
 
@@ -97,8 +96,6 @@ app.post('/webhook/', (req, res) => {
         event = req.body.entry[0].messaging[i];
         sender = event.sender.id;
 
-        // if (infoUsuario  == null) getUserInfo(sender); //pegar as informações do usuário
-
         if (event.message && event.message.text) text = event.message.text;
         else if (event.postback && !text) text = event.postback.payload;
         else break;
@@ -109,38 +106,28 @@ app.post('/webhook/', (req, res) => {
         //     input: { "text": text },
         //     alternate_intents: true
         // };
-
-        // callWatson(payload, sender); //sender - id usuário facebook
-//-----------------------------------------------------------------------------
-                                //ZONA DE TESTES
-        // if (infoUsuario  == null) getUserInfo(sender, callWatson(text, sender)); //pegar as informações do usuário
         
-        if (infoUsuario  == null) {
+        if (infoUsuario  == null || sender != infoUsuario.id) {
             getUserInfo(sender);
+
+            contexto_atual = firebase.getUserInfoInFirebase(admin, sender); //buscar contexto da conversa no firebase
+
             console.log("Vamos esperar")
+
             setTimeout(() => {
                 console.log("Foi")
                 console.log("Informações do Usuário");
                 console.log(infoUsuario)
+                
                 callWatson(text, sender);
             }, 1500);
         }
         else callWatson(text, sender)  //pegar as informações do usuário
         
-        
-        
-        
-        
-
 //-----------------------------------------------------------------------------
     }
     res.sendStatus(200);
 });
-
-// function sendMessage(sender, text_) {
-//     text_ = text_.substring(0, 319);
-
-//     messageData = { text: text_ };
 
 function sendMessage(sender, messageData) {
 
@@ -167,7 +154,7 @@ function getUserInfo(sender) {
     var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.FB_TOKEN;
     request({
         url: usersPublicProfile,
-        json: true // parse
+        json: true
     }, (error, response, body) => {
         if (!error && response.statusCode === 200) {
             infoUsuario = body;
