@@ -31,8 +31,6 @@ app.listen(process.env.PORT || 5000, () => console.log('webhook está ouvindo'))
 var infoUsuario = null;
 var contexto_atual = null;
 
-(getStarted()())
-
 // remover isso aki
 app.get("/", function (req, res) {
     res.send("Deployed!");
@@ -276,7 +274,7 @@ function sendTypingOn(sender) {
  * botão iniciar conversa
  *
  */
-function getStarted() {
+(function getStarted() {
 
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -296,4 +294,4 @@ function getStarted() {
             console.log('Error: ', response.body.error);
         }
     });
-}
+}())
