@@ -274,7 +274,7 @@ function sendTypingOn(sender) {
  * botão iniciar conversa
  *
  */
-(() => {
+(function() {
 
     request({
         url: 'https://graph.facebook.com/v2.6/me/messenger_profile',
