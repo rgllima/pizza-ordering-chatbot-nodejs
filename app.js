@@ -31,7 +31,7 @@ app.listen(process.env.PORT || 5000, () => console.log('webhook está ouvindo'))
 var infoUsuario = null;
 var contexto_atual = null;
 
-app.getStarted()
+(getStarted()())
 
 // remover isso aki
 app.get("/", function (req, res) {
