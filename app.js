@@ -274,10 +274,10 @@ function sendTypingOn(sender) {
  * botão iniciar conversa
  *
  */
-(function getStarted() {
+(getStarted() => {
 
     request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
+        url: 'https://graph.facebook.com/v2.6/me/messenger_profile',
         qs: {
             access_token: process.env.FB_TOKEN
         },
