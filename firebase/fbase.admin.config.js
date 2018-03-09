@@ -31,7 +31,7 @@ const setUserInfoInFirebase = (admin, userInfo, contextWatson) => {
   var db = admin.database();
   var id = userInfo.id;
 
-  db.ref("establishments" + establishmentID + "/clientes/" + id).set({
+  db.ref("establishments/" + establishmentID + "/clientes/" + id).set({
     last_context_dialog: contextWatson,
     dataUser: userInfo,
     history_order: '',
