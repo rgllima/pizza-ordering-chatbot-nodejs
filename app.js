@@ -96,7 +96,7 @@ function callWatson(text, sender) { //testando com o async
 //---------------------Facebook-----------------------------
 
 function getFacebookIdPage() {
-    if (facebookTokenPage == null) {
+    if (facebookIdPage == null) {
         FB.api('me', function (res) {
             if (!res || res.error) {
                 console.log(!res ? 'error occurred' : res.error);
@@ -130,7 +130,7 @@ app.post('/webhook/', (req, res) => {
         else break;
 
         // retirar o setTimeout, estudar formas de retirá-lo
-        
+
         if (infoUsuario == null || sender != infoUsuario.id) {
             getUserInfo(sender);
 
