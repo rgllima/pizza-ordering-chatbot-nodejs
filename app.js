@@ -131,16 +131,16 @@ app.post('/webhook/', (req, res) => {
         // retirar o setTimeout, estudar formas de retirá-lo
 
         if (infoUsuario == null || sender != infoUsuario.id) {
-            getUserInfo(sender, text, callWatson());
+            getUserInfo(sender);
 
             readDataInFirebase(sender); // Buscar contexto da conversa
 
-            // setTimeout(() => {
+            setTimeout(() => {
 
-            //     console.log("Contexto Atual");
-            //     console.log(contexto_atual);
-            //     callWatson(text, sender);
-            // }, 1500);
+                console.log("Contexto Atual");
+                console.log(contexto_atual);
+                callWatson(text, sender);
+            }, 1500);
         } else callWatson(text, sender) //pegar as informações do usuário
 
     }
@@ -172,7 +172,7 @@ function sendMessage(sender, messageData) {
     });
 };
 
-function getUserInfo(sender, callback) {
+function getUserInfo(sender) {
     var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.FB_TOKEN;
     request({
         url: usersPublicProfile,
@@ -180,7 +180,6 @@ function getUserInfo(sender, callback) {
     }, (error, response, body) => {
         if (!error && response.statusCode === 200) {
             infoUsuario = body;
-            callback(text, sender)
         }
     });
 };
