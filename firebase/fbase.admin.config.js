@@ -1,4 +1,5 @@
-let getContext = null;
+var establishmentID = 'FtGtribEX9Zp0OvTAHPOwhefM';
+var facebookIdPage = '1581467655294794';
 
 const connectToFirebase = () => {
   var admin = require("firebase-admin");
@@ -52,25 +53,23 @@ const getUserInfoInFirebase = (admin, idUser, callBack) => {
     console.log(errorObject.code);
   });
 }
-const getEstablishmentTokenInFirebase = (facebookPageToken) => {
-  var db = admin.database();
+// const getEstablishmentTokenInFirebase = (facebookPageToken) => {
+//   var db = admin.database();
 
-  db.ref("/webhook/" + facebookPageToken).once("value", (snapshot) => {
-    console.log("InfoUserBaixado");
-    console.log(snapshot.val().establishmentID);
+//   db.ref("/webhook/" + facebookPageToken).once("value", (snapshot) => {
+//     console.log("InfoUserBaixado");
+//     console.log(snapshot.val().establishmentID);
     
-    // callBack(snapshot.val())
-  }, (errorObject)=>{
-    console.log("InfoUser Não Baixado - Erro");
-    console.log(errorObject.code);
-  });
-}
+//     // callBack(snapshot.val())
+//   }, (errorObject)=>{
+//     console.log("InfoUser Não Baixado - Erro");
+//     console.log(errorObject.code);
+//   });
+// }
 
 module.exports = {
   connectToFirebase,
   salvarPedidos,
   setUserInfoInFirebase,
-  getUserInfoInFirebase,
-  getContext,
-  getEstablishmentTokenInFirebase
+  getUserInfoInFirebase
 }

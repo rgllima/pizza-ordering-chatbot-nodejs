@@ -25,8 +25,6 @@ app.listen(process.env.PORT || 5000, () => console.log('webhook está ouvindo'))
 
 var infoUsuario = null;
 var contexto_atual = null;
-var establishmentID = null;
-var facebookIdPage = null;
 
 // remover isso aki
 app.get("/", function (req, res) {
@@ -35,15 +33,16 @@ app.get("/", function (req, res) {
 
 //---------------------Firebase-----------------------------
 function writeDataInFirebase(results, payld) {
-    firebase.salvarPedidos(admin, results, infoUsuario, payld)//salvar os pedidos dos usuários
+    firebase.salvarPedidos(admin, results, infoUsuario, payld) // salvar os pedidos dos usuários
     
-    firebase.setUserInfoInFirebase(admin, infoUsuario, contexto_atual); //salvar contexto da conversa e info usuário no firebase
+    firebase.setUserInfoInFirebase(admin, infoUsuario, contexto_atual); // salvar contexto da conversa e info usuário no firebase
 }
 
 function readDataInFirebase(sender) {
-    firebase.getUserInfoInFirebase(admin, sender, (contextWt) => {
-        contexto_atual = contextWt;
-    }); //buscar contexto da conversa no firebase
+    // buscar contexto da conversa no firebase
+    firebase.getUserInfoInFirebase(admin, sender, (context) => {
+        contexto_atual = context;
+    });
 }
 //---------------------Watson------------------------------
 var w_conversation = new Conversation({
@@ -95,20 +94,20 @@ function callWatson(text, sender) { //testando com o async
 
 //---------------------Facebook-----------------------------
 
-function getFacebookIdPage() {
-    if (facebookIdPage == null) {
-        FB.api('me', function (res) {
-            if (!res || res.error) {
-                console.log(!res ? 'error occurred' : res.error);
-                return;
-            }
-            console.log(res)
-            facebookIdPage = res;
-            //callback();
-        });
-    } else {
-    }
-}
+// function getFacebookIdPage() {
+//     if (facebookIdPage == null) {
+//         FB.api('me', function (res) {
+//             if (!res || res.error) {
+//                 console.log(!res ? 'error occurred' : res.error);
+//                 return;
+//             }
+//             console.log(res.id)
+//             facebookIdPage = res.id;
+//             //callback();
+//         });
+//     } else {
+//     }
+// }
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === process.env.FB_TOKENVERIFIC)
         res.send(req.query['hub.challenge']);
@@ -132,17 +131,16 @@ app.post('/webhook/', (req, res) => {
         // retirar o setTimeout, estudar formas de retirá-lo
 
         if (infoUsuario == null || sender != infoUsuario.id) {
-            getUserInfo(sender);
+            getUserInfo(sender, text, callWatson());
 
             readDataInFirebase(sender); // Buscar contexto da conversa
-            getFacebookIdPage(); //Pegar o id do usuário, remover logo depois----
 
-            setTimeout(() => {
+            // setTimeout(() => {
 
-                console.log("Contexto Atual");
-                console.log(contexto_atual);
-                callWatson(text, sender);
-            }, 1500);
+            //     console.log("Contexto Atual");
+            //     console.log(contexto_atual);
+            //     callWatson(text, sender);
+            // }, 1500);
         } else callWatson(text, sender) //pegar as informações do usuário
 
     }
@@ -174,7 +172,7 @@ function sendMessage(sender, messageData) {
     });
 };
 
-function getUserInfo(sender) {
+function getUserInfo(sender, callback) {
     var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.FB_TOKEN;
     request({
         url: usersPublicProfile,
@@ -182,6 +180,7 @@ function getUserInfo(sender) {
     }, (error, response, body) => {
         if (!error && response.statusCode === 200) {
             infoUsuario = body;
+            callback(sender, text)
         }
     });
 };
