@@ -15,11 +15,6 @@ var bodyParser = require('body-parser');
 
 var Conversation = require('watson-developer-cloud/conversation/v1');
 
-// require('dotenv').config({ silent: true });
-
-// var cfenv = require('cfenv');
-// app.use(express.static(__dirname + '/public'));
-
 var app = express();
 app.use(bodyParser.urlencoded({
     extended: false
@@ -30,6 +25,8 @@ app.listen(process.env.PORT || 5000, () => console.log('webhook está ouvindo'))
 
 var infoUsuario = null;
 var contexto_atual = null;
+var establishmentID = null;
+var facebookIdPage = null;
 
 // remover isso aki
 app.get("/", function (req, res) {
@@ -37,10 +34,17 @@ app.get("/", function (req, res) {
 });
 
 //---------------------Firebase-----------------------------
-function writeFirebase(results, payld) {
-    firebase.salvarPedidos(admin, results, infoUsuario, payld)
+function writeDataInFirebase(results, payld) {
+    firebase.salvarPedidos(admin, results, infoUsuario, payld)//salvar os pedidos dos usuários
+    
+    firebase.setUserInfoInFirebase(admin, infoUsuario, contexto_atual); //salvar contexto da conversa e info usuário no firebase
 }
 
+function readDataInFirebase(sender) {
+    firebase.getUserInfoInFirebase(admin, sender, (contextWt) => {
+        contexto_atual = contextWt;
+    }); //buscar contexto da conversa no firebase
+}
 //---------------------Watson------------------------------
 var w_conversation = new Conversation({
     url: 'https://gateway.watsonplatform.net/conversation/api',
@@ -50,7 +54,6 @@ var w_conversation = new Conversation({
     version: 'v1'
 });
 
-// function callWatson(payload, sender) {
 function callWatson(text, sender) { //testando com o async
     console.log("Entrei em callWatson")
 
@@ -86,12 +89,26 @@ function callWatson(text, sender) { //testando com o async
                 } else buildTextMessage(sender, results.output.text[i++]);
             }
         }
-        writeFirebase(results, payload); //rever isso aki
-        firebase.setUserInfoInFirebase(admin, infoUsuario, contexto_atual); //salvar contexto da conversa e info usuário no firebase
+        writeDataInFirebase(results, payload); //Escrever informações no banco de dados
     });
 }
 
 //---------------------Facebook-----------------------------
+
+function getFacebookIdPage() {
+    if (facebookTokenPage == null) {
+        FB.api('me', function (res) {
+            if (!res || res.error) {
+                console.log(!res ? 'error occurred' : res.error);
+                return;
+            }
+            console.log(res)
+            facebookIdPage = res;
+            //callback();
+        });
+    } else {
+    }
+}
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === process.env.FB_TOKENVERIFIC)
         res.send(req.query['hub.challenge']);
@@ -112,13 +129,13 @@ app.post('/webhook/', (req, res) => {
         else if (event.postback && !text) text = event.postback.payload;
         else break;
 
-
+        // retirar o setTimeout, estudar formas de retirá-lo
+        
         if (infoUsuario == null || sender != infoUsuario.id) {
             getUserInfo(sender);
 
-            firebase.getUserInfoInFirebase(admin, sender, (contextWt) => {
-                contexto_atual = contextWt;
-            }); //buscar contexto da conversa no firebase
+            readDataInFirebase(sender); // Buscar contexto da conversa
+            getFacebookIdPage(); //Pegar o id do usuário, remover logo depois----
 
             setTimeout(() => {
 
@@ -132,7 +149,7 @@ app.post('/webhook/', (req, res) => {
     res.sendStatus(200);
 });
 
-//------------------------------- ----------------------------------------
+//------------------------------ Facebook API Graph ----------------------------------------
 
 function sendMessage(sender, messageData) {
 
