@@ -1,4 +1,4 @@
-let establishmentID = String('FtGtribEX9Zp0OvTAHPOwhefM');
+var establishmentID = 'FtGtribEX9Zp0OvTAHPOwhefM';
 // var facebookIdPage = '1581467655294794';
 
 const connectToFirebase = () => {
