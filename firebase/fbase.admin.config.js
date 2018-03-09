@@ -1,4 +1,4 @@
-var establishmentID = 'FtGtribEX9Zp0OvTAHPOwhefM';
+let establishmentID = String('FtGtribEX9Zp0OvTAHPOwhefM');
 // var facebookIdPage = '1581467655294794';
 
 const connectToFirebase = () => {
@@ -42,7 +42,7 @@ const setUserInfoInFirebase = (admin, userInfo, contextWatson) => {
 const getUserInfoInFirebase = (admin, idUser, callBack) => {
   var db = admin.database();
 
-  db.ref("establishments" + establishmentID + "/clientes/" + idUser + "/last_context_dialog").once("value", (snapshot) => {
+  db.ref("establishments/" + establishmentID + "/clientes/" + idUser + "/last_context_dialog").once("value", (snapshot) => {
     console.log("InfoUserBaixado");
     console.log(snapshot.val());
     

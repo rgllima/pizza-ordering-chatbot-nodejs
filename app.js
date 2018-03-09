@@ -33,9 +33,11 @@ app.get("/", function (req, res) {
 
 //---------------------Firebase-----------------------------
 function writeDataInFirebase(results, payld) {
-    firebase.salvarPedidos(admin, results, infoUsuario, payld) // salvar os pedidos dos usuários
+    // salvar os pedidos dos usuários
+    firebase.salvarPedidos(admin, results, infoUsuario, payld);
     
-    firebase.setUserInfoInFirebase(admin, infoUsuario, contexto_atual); // salvar contexto da conversa e info usuário no firebase
+    // salvar contexto da conversa e info usuário no firebase
+    firebase.setUserInfoInFirebase(admin, infoUsuario, contexto_atual);
 }
 
 function readDataInFirebase(sender) {
