@@ -180,7 +180,7 @@ function getUserInfo(sender, callback) {
     }, (error, response, body) => {
         if (!error && response.statusCode === 200) {
             infoUsuario = body;
-            callback(sender, text)
+            callback(text, sender)
         }
     });
 };
