@@ -1,5 +1,5 @@
 var establishmentID = 'FtGtribEX9Zp0OvTAHPOwhefM';
-var facebookIdPage = '1581467655294794';
+// var facebookIdPage = '1581467655294794';
 
 const connectToFirebase = () => {
   var admin = require("firebase-admin");
@@ -17,7 +17,7 @@ const salvarPedidos = (admin, respostaWatson, userInfo, payld) => {
 
   if (respostaWatson != null) {
     var id = respostaWatson.context.conversation_id;
-    db.ref("/pedidos/" + id).set({
+    db.ref("/establishments/" + establishmentID + "/pedidos/" + id).set({
       Data: respostaWatson,
       Status: "Pendente",
       Address: "",
@@ -31,7 +31,7 @@ const setUserInfoInFirebase = (admin, userInfo, contextWatson) => {
   var db = admin.database();
   var id = userInfo.id;
 
-  db.ref("/clientes/" + id).set({
+  db.ref("establishments" + establishmentID + "/clientes/" + id).set({
     last_context_dialog: contextWatson,
     dataUser: userInfo,
     history_order: '',
@@ -42,11 +42,10 @@ const setUserInfoInFirebase = (admin, userInfo, contextWatson) => {
 const getUserInfoInFirebase = (admin, idUser, callBack) => {
   var db = admin.database();
 
-  db.ref("/clientes/" + idUser + "/last_context_dialog").once("value", (snapshot) => {
+  db.ref("establishments" + establishmentID + "/clientes/" + idUser + "/last_context_dialog").once("value", (snapshot) => {
     console.log("InfoUserBaixado");
     console.log(snapshot.val());
     
-    // getContext = snapshot.val();
     callBack(snapshot.val())
   }, (errorObject)=>{
     console.log("InfoUser Não Baixado - Erro");
