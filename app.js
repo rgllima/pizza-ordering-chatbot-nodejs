@@ -152,8 +152,8 @@ app.post('/webhook/', (req, res) => {
 
             setTimeout(() => {
 
-                console.log("Contexto Atual");
-                console.log(contexto_atual);
+                console.log("Contexto Atualizado");
+                // console.log(contexto_atual);
                 callWatson(text, sender);
             }, 1500);
         } else callWatson(text, sender) //pegar as informações do usuário
@@ -209,7 +209,11 @@ function buildTextMessage(sender, text_) {
 
 function buildButtonsMenu(sender) {
     console.log("Opções do Cardápio");
-    console.log(Object.keys(cardapio));
+    // console.log(Object.keys(cardapio));
+
+    Object.keys(cardapio).forEach(element => {
+        console.log(element);
+    });
 
     var elements = [{
         "title": "Este é o nosso menu, escolha a opção desejada.",
@@ -226,7 +230,7 @@ function buildButtonsMenu(sender) {
             "title": "Refrigerantes",
             "payload": "outro",
         }],
-    }]
+    }];
 
 
     let messageData = {
@@ -237,7 +241,8 @@ function buildButtonsMenu(sender) {
                 "elements": elements
             }
         }
-    }
+    };
+    sendMessage(sender, messageData);
 }
 
 function buildCardMessage(sender) {
