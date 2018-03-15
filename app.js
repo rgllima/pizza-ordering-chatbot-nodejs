@@ -225,16 +225,30 @@ function buildTextMessage(sender, text_) {
 //   });
 
 function buildButtonsMenu(sender) {
-    var buttons = [];
+    var elements = [];
 
     Object.keys(cardapio).forEach(element => {
         console.log(element);
+
+        sendMessage(sender, {
+            text: 'Veja em nosso menu as opções disponíveis.'
+        });
+
         var aux = {
             "type": "postback",
             "title": element,
-            "payload": 'Ver produto da categoria ' + element + ''
+            "payload": 'Ver produto da categoria ' + element + '',
+            
+            "title": element,
+            "subtitle": "Escolha essa opção para " + element + ".",
+            "image_url": "https://goo.gl/gy85bR",
+            "buttons": [{
+                "type": "postback",
+                "title": "Ver Produtos",
+                "payload": element,
+            }]
         };
-        buttons.push(aux);
+        elements.push(aux);
     });
 
     var messageData = {
@@ -242,10 +256,7 @@ function buildButtonsMenu(sender) {
             "type": "template",
             "payload": {
                 "template_type": "generic",
-                "elements": [{
-                    "title": "Este é o nosso menu, escolha uma opção.",
-                    "buttons": buttons,
-                }]
+                "elements": elements
             }
         }
     };
@@ -263,7 +274,7 @@ function buildCardMessage(sender) {
                     "subtitle": "hoje estou só testando",
                     "image_url": "https://goo.gl/N2Wb4t",
                     "buttons": [{
-                        "type": "web_url",
+                        "type": "postback",
                         "url": "https://www.messenger.com",
                         "title": "web url"
                     }, {
