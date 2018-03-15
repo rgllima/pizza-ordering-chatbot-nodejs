@@ -234,11 +234,7 @@ function buildButtonsMenu(sender) {
             text: 'Veja em nosso menu as opções disponíveis.'
         });
 
-        var aux = {
-            "type": "postback",
-            "title": element,
-            "payload": 'Ver produto da categoria ' + element + '',
-            
+        var aux = {            
             "title": element,
             "subtitle": "Escolha essa opção para " + element + ".",
             "image_url": "https://goo.gl/gy85bR",
