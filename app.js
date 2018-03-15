@@ -147,7 +147,7 @@ app.post('/webhook/', (req, res) => {
             console.log("Evento de PostBack");
             console.log(event);
             console.log(event.postback);
-            break;
+            // break;
         }
         else break;
 
