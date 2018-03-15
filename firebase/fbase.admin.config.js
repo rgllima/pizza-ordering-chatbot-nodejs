@@ -46,19 +46,20 @@ const getUserInfoInFirebase = (admin, idUser, callBack) => {
     console.log("InfoUserBaixado");
     console.log(snapshot.val());
     
-    callBack(snapshot.val())
+    callBack(snapshot.val());
   }, (errorObject)=>{
     console.log("InfoUser Não Baixado - Erro");
     console.log(errorObject.code);
   });
 }
 
-const getCardapioFirebase = (admin) => {
+const getCardapioFirebase = (admin, callBack) => {
   var db = admin.database();
 
   db.ref("establishments/" + establishmentID + "/cardapio/").on("value", (snapshot) => {
-    console.log("\n\nBaixando informações do cardápio");
-    console.log(snapshot.val());
+    console.log("\n\nBaixando informações do cardápio\n\n");
+    callBack(snapshot.val());
+    // console.log(snapshot.val());
   });
 }
 // getProductListInFirebase() {
@@ -84,6 +85,8 @@ const getCardapioFirebase = (admin) => {
 //     console.log(errorObject.code);
 //   });
 // }
+
+
 
 // const getEstablishmentTokenInFirebase = (facebookPageToken) => {
 //   var db = admin.database();

@@ -48,7 +48,14 @@ function readDataInFirebase(sender) {
         contexto_atual = context;
     });
 
-    firebase.getCardapioFirebase(admin);
+    // buscar cardápio no firebase;
+    if (cardapio == null) {
+        firebase.getCardapioFirebase(admin, (novoCardapio) => {
+            cardapio = novoCardapio;
+            console.log('Exibindo Cardápio');
+            console.log(cardapio);
+        });
+    }
 }
 //---------------------Watson------------------------------
 var w_conversation = new Conversation({
