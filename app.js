@@ -142,10 +142,11 @@ app.post('/webhook/', (req, res) => {
         if (event.message && event.message.text)
             text = event.message.text;
         else if (event.postback && !text) {
+            // Usar switch case para pegar evento do webhook
             text = event.postback.payload;
             console.log("Evento de PostBack");
             console.log(event);
-            console.log(event.postback)
+            console.log(event.postback);
             break;
         }
         else break;
@@ -211,12 +212,19 @@ function buildTextMessage(sender, text_) {
 
     sendMessage(sender, {
         text: text_
-    })
+    });
 }
 
+// Excluir depois - Forma de buscar os dados que eu quero no cardápio
+
+// Object.keys(this.productList).forEach((item) => {
+//     for (var [key, value] of Object.entries(this.productList[item])) { 
+//       // console.log(JSON.parse(JSON.stringify(value)));
+//       arrayAux.push(value)
+//     }
+//   });
+
 function buildButtonsMenu(sender) {
-    console.log("Opções do Cardápio");
-    // console.log(Object.keys(cardapio));
     var buttons = [];
 
     Object.keys(cardapio).forEach(element => {
@@ -224,21 +232,19 @@ function buildButtonsMenu(sender) {
         var aux = {
             "type": "postback",
             "title": element,
-            "payload": element
+            "payload": 'Ver produto da categoria ' + element + ''
         };
         buttons.push(aux);
     });
 
-    // var elements = 
-
-    let messageData = {
+    var messageData = {
         "attachment": {
             "type": "template",
             "payload": {
                 "template_type": "generic",
                 "elements": [{
                     "title": "Este é o nosso menu, escolha uma opção.",
-                    "buttons": buttons
+                    "buttons": buttons,
                 }]
             }
         }
@@ -266,6 +272,36 @@ function buildCardMessage(sender) {
                         "payload": "Payload for first element in a generic bubble",
                     }],
                 }, {
+                    "title": "Second card",
+                    "subtitle": "Element #2 of an hscroll",
+                    "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
+                    "buttons": [{
+                        "type": "postback",
+                        "title": "Postback",
+                        "payload": "Payload for second element in a generic bubble",
+                    }],
+                },
+                {
+                    "title": "Second card",
+                    "subtitle": "Element #2 of an hscroll",
+                    "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
+                    "buttons": [{
+                        "type": "postback",
+                        "title": "Postback",
+                        "payload": "Payload for second element in a generic bubble",
+                    }],
+                },
+                {
+                    "title": "Second card",
+                    "subtitle": "Element #2 of an hscroll",
+                    "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
+                    "buttons": [{
+                        "type": "postback",
+                        "title": "Postback",
+                        "payload": "Payload for second element in a generic bubble",
+                    }],
+                },
+                {
                     "title": "Second card",
                     "subtitle": "Element #2 of an hscroll",
                     "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
