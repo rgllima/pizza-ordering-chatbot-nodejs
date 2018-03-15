@@ -273,7 +273,7 @@ function buildCardsMenu(sender) {
 function buildCardsProdutos(sender, categoria) {
     var elements = [];
 
-    for (var [key, value] of Object.entries(this.productList[categoria])) {
+    for (var [key, value] of Object.entries(cardapio[categoria])) {
         console.log(key);
         console.log(value);
     }
