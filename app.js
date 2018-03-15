@@ -26,6 +26,8 @@ app.listen(process.env.PORT || 5000, () => console.log('webhook está ouvindo'))
 var infoUsuario = null;
 var contexto_atual = null;
 
+var cardapio = null; // variável que contém o cardápio do estabelecimento;
+
 // remover isso aki
 app.get("/", function (req, res) {
     res.send("Deployed!");
@@ -45,6 +47,8 @@ function readDataInFirebase(sender) {
     firebase.getUserInfoInFirebase(admin, sender, (context) => {
         contexto_atual = context;
     });
+
+    firebase.getCardapioFirebase(admin);
 }
 //---------------------Watson------------------------------
 var w_conversation = new Conversation({

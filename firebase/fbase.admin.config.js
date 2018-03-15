@@ -17,7 +17,7 @@ const salvarPedidos = (admin, respostaWatson, userInfo, payld) => {
 
   if (respostaWatson != null) {
     var id = respostaWatson.context.conversation_id;
-    db.ref("/establishments/" + establishmentID + "/pedidos/" + id).set({
+    db.ref("establishments/" + establishmentID + "/pedidos/" + id).set({
       Data: respostaWatson,
       Status: "Pendente",
       Address: "",
@@ -52,6 +52,19 @@ const getUserInfoInFirebase = (admin, idUser, callBack) => {
     console.log(errorObject.code);
   });
 }
+
+const getCardapioFirebase = (admin) => {
+  var db = admin.database();
+
+  db.ref("establishments/" + establishmentID + "/cardapio/").once("value", (snapshot) => {
+    console.log("InfoUserBaixado");
+    console.log(snapshot.val());
+  }, (errorObject)=>{
+    console.log("InfoUser Não Baixado - Erro");
+    console.log(errorObject.code);
+  });
+}
+
 // const getEstablishmentTokenInFirebase = (facebookPageToken) => {
 //   var db = admin.database();
 
@@ -70,5 +83,6 @@ module.exports = {
   connectToFirebase,
   salvarPedidos,
   setUserInfoInFirebase,
-  getUserInfoInFirebase
+  getUserInfoInFirebase,
+  getCardapioFirebase
 }
