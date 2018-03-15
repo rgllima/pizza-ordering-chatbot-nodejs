@@ -145,7 +145,16 @@ app.post('/webhook/', (req, res) => {
 
         else if (event.postback && !text) {
             // Usar switch case para pegar evento do webhook
+            // switch (key) {
+            //     case value:
+                    
+            //         break;
             
+            //     default:
+            //         break;
+            // }
+            
+            text = event.postback.payload;
             console.log("Evento de PostBack");
             console.log(event);
             console.log(event.postback);
@@ -244,7 +253,7 @@ function buildButtonsMenu(sender) {
             "buttons": [{
                 "type": "postback",
                 "title": "Ver Produtos",
-                "payload": element,
+                "payload": '' + element,
             }]
         };
         elements.push(aux);
