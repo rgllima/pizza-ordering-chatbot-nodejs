@@ -98,6 +98,7 @@ function callWatson(text, sender) { //testando com o async
                     sendImageMessage(sender);
                     break;
                 } else if (results.intents[0].intent == "menu") {
+                    buildTextMessage(sender, results.output.text[i++]);
                     buildButtonsMenu(sender);
                     break;
                 } else buildTextMessage(sender, results.output.text[i++]);
@@ -141,9 +142,14 @@ app.post('/webhook/', (req, res) => {
 
         if (event.message && event.message.text)
             text = event.message.text;
-        else if (event.postback && !text) {
+        else if (!text)
+        text = event.postback.payload;
+        else if (event.postback) {
             // Usar switch case para pegar evento do webhook
             text = event.postback.payload;
+            sendMessage(sender, {
+                text: 'Você escolheu' + text // remover -------------
+            });
             console.log("Evento de PostBack");
             console.log(event);
             console.log(event.postback);
@@ -229,10 +235,6 @@ function buildButtonsMenu(sender) {
 
     Object.keys(cardapio).forEach(element => {
         console.log(element);
-
-        sendMessage(sender, {
-            text: 'Veja em nosso menu as opções disponíveis.'
-        });
 
         var aux = {            
             "title": element,
