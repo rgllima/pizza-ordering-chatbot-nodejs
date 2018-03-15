@@ -143,6 +143,9 @@ app.post('/webhook/', (req, res) => {
             text = event.message.text;
         else if (event.postback && !text) {
             text = event.postback.payload;
+            console.log("Evento de PostBack");
+            console.log(event);
+            console.log(event.postback)
             break;
         }
         else break;
@@ -226,34 +229,17 @@ function buildButtonsMenu(sender) {
         buttons.push(aux);
     });
 
-    var elements = [{
-        "title": "Este é o nosso menu, escolha uma opção.",
-        "buttons": buttons
-    }];
-
-    // var elements = [{
-    //     "title": "Este é o nosso menu, escolha uma opção.",
-    //     "buttons": [{
-    //         "type": "postback",
-    //         "title": "Pizzas",
-    //         "payload": "sao paulo",
-    //     }, {
-    //         "type": "postback",
-    //         "title": "Sanduiches",
-    //         "payload": "rio de janeiro",
-    //     }, {
-    //         "type": "postback",
-    //         "title": "Refrigerantes",
-    //         "payload": "outro",
-    //     }],
-    // }];
+    // var elements = 
 
     let messageData = {
         "attachment": {
             "type": "template",
             "payload": {
                 "template_type": "generic",
-                "elements": elements
+                "elements": [{
+                    "title": "Este é o nosso menu, escolha uma opção.",
+                    "buttons": buttons
+                }]
             }
         }
     };
