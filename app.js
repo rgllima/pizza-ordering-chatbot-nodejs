@@ -139,9 +139,14 @@ app.post('/webhook/', (req, res) => {
 
         sendTypingOn(sender); // sinalização de que o bot está digitando
 
-        if (event.message && event.message.text) text = event.message.text;
-        else if (event.postback && !text) text = event.postback.payload;
+        if (event.message && event.message.text)
+            text = event.message.text;
+        else if (event.postback && !text) {
+            text = event.postback.payload;
+            break;
+        }
         else break;
+
 
         // retirar o setTimeout, estudar formas de retirá-lo
 
@@ -157,7 +162,6 @@ app.post('/webhook/', (req, res) => {
                 callWatson(text, sender);
             }, 1500);
         } else callWatson(text, sender) //pegar as informações do usuário
-
     }
     res.sendStatus(200);
 });
