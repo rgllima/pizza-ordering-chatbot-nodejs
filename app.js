@@ -142,17 +142,18 @@ app.post('/webhook/', (req, res) => {
 
         if (event.message && event.message.text)
             text = event.message.text;
-        else if (!text)
-        text = event.postback.payload;
-        else if (event.postback) {
+
+        else if (event.postback && !text) {
             // Usar switch case para pegar evento do webhook
+            
+            console.log("Evento de PostBack");
+            console.log(event);
+            console.log(event.postback);
+
             text = event.postback.payload;
             sendMessage(sender, {
                 text: 'Você escolheu' + text // remover -------------
             });
-            console.log("Evento de PostBack");
-            console.log(event);
-            console.log(event.postback);
             // break;
         }
         else break;
