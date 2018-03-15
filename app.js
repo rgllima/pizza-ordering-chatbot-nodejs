@@ -52,8 +52,7 @@ function readDataInFirebase(sender) {
     if (cardapio == null) {
         firebase.getCardapioFirebase(admin, (novoCardapio) => {
             cardapio = novoCardapio;
-            console.log('Exibindo Cardápio');
-            console.log(cardapio);
+            console.log('Cardápio Atualizado');
         });
     }
 }
@@ -97,6 +96,9 @@ function callWatson(text, sender) { //testando com o async
                     break;
                 } else if (results.intents[0].intent == "ver_foto") {
                     sendImageMessage(sender);
+                    break;
+                } else if (results.intents[0].intent == "menu") {
+                    buildButtonsMenu(sender);
                     break;
                 } else buildTextMessage(sender, results.output.text[i++]);
             }
@@ -203,6 +205,39 @@ function buildTextMessage(sender, text_) {
     sendMessage(sender, {
         text: text_
     })
+}
+
+function buildButtonsMenu(sender) {
+    console.log("Opções do Cardápio");
+    console.log(Object.keys(cardapio));
+
+    var elements = [{
+        "title": "Este é o nosso menu, escolha a opção desejada.",
+        "buttons": [{
+            "type": "postback",
+            "title": "Pizzas",
+            "payload": "sao paulo",
+        }, {
+            "type": "postback",
+            "title": "Sanduiches",
+            "payload": "rio de janeiro",
+        }, {
+            "type": "postback",
+            "title": "Refrigerantes",
+            "payload": "outro",
+        }],
+    }]
+
+
+    let messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": elements
+            }
+        }
+    }
 }
 
 function buildCardMessage(sender) {
