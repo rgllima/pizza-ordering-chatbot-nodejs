@@ -37,7 +37,7 @@ app.get("/", function (req, res) {
 function writeDataInFirebase(results, payld) {
     // salvar os pedidos dos usuários
     firebase.salvarPedidos(admin, results, infoUsuario, payld);
-    
+
     // salvar contexto da conversa e info usuário no firebase
     firebase.setUserInfoInFirebase(admin, infoUsuario, contexto_atual);
 }
@@ -99,7 +99,7 @@ function callWatson(text, sender) { //testando com o async
                     break;
                 } else if (results.intents[0].intent == "menu") {
                     buildTextMessage(sender, results.output.text[i++]);
-                    buildButtonsMenu(sender);
+                    buildCardsMenu(sender);
                     break;
                 } else buildTextMessage(sender, results.output.text[i++]);
             }
@@ -145,27 +145,26 @@ app.post('/webhook/', (req, res) => {
 
         else if (event.postback && !text) {
             // Usar switch case para pegar evento do webhook
-            // switch (key) {
-            //     case value:
-                    
-            //         break;
-            
-            //     default:
-            //         break;
-            // }
-            
+            switch (event.postback.title) {
+                case 'Ver Produtos':
+                    buildCardsProdutos(sender, event.postback.payload);
+                    break;
+
+                default:
+                    console.log("Evento de Postback Default!")
+                    break;
+            }
+
             text = event.postback.payload;
             console.log("Evento de PostBack");
             console.log(event);
             console.log(event.postback);
 
-            text = event.postback.payload;
             sendMessage(sender, {
-                text: 'Você escolheu' + text // remover -------------
+                text: 'Você escolheu ' + text // remover -------------
             });
             // break;
-        }
-        else break;
+        } else break;
 
 
         // retirar o setTimeout, estudar formas de retirá-lo
@@ -240,24 +239,60 @@ function buildTextMessage(sender, text_) {
 //     }
 //   });
 
-function buildButtonsMenu(sender) {
+function buildCardsMenu(sender) {
     var elements = [];
 
     Object.keys(cardapio).forEach(element => {
         console.log(element);
 
-        var aux = {            
+        var aux = {
             "title": element,
             "subtitle": "Escolha essa opção para " + element + ".",
             "image_url": "https://goo.gl/gy85bR",
             "buttons": [{
                 "type": "postback",
                 "title": "Ver Produtos",
-                "payload": '' + element,
+                "payload": element,
             }]
         };
         elements.push(aux);
     });
+
+    var messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": elements
+            }
+        }
+    };
+    sendMessage(sender, messageData);
+}
+
+function buildCardsProdutos(sender, categoria) {
+    var elements = [];
+
+    for (var [key, value] of Object.entries(this.productList[categoria])) {
+        console.log(key);
+        console.log(value);
+    }
+
+    // Object.keys(cardapio).forEach(element => {
+    //     console.log(element);
+
+    //     var aux = {
+    //         "title": element,
+    //         "subtitle": "Escolha essa opção para " + element + ".",
+    //         "image_url": "https://goo.gl/gy85bR",
+    //         "buttons": [{
+    //             "type": "postback",
+    //             "title": "Ver Produtos",
+    //             "payload": element,
+    //         }]
+    //     };
+    //     elements.push(aux);
+    // });
 
     var messageData = {
         "attachment": {
@@ -289,15 +324,6 @@ function buildCardMessage(sender) {
                         "type": "postback",
                         "title": "Mussarela",
                         "payload": "Payload for first element in a generic bubble",
-                    }],
-                }, {
-                    "title": "Second card",
-                    "subtitle": "Element #2 of an hscroll",
-                    "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
-                    "buttons": [{
-                        "type": "postback",
-                        "title": "Postback",
-                        "payload": "Payload for second element in a generic bubble",
                     }],
                 }]
             }
