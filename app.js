@@ -210,28 +210,39 @@ function buildTextMessage(sender, text_) {
 function buildButtonsMenu(sender) {
     console.log("Opções do Cardápio");
     // console.log(Object.keys(cardapio));
+    var buttons = [];
 
     Object.keys(cardapio).forEach(element => {
         console.log(element);
+        var aux = {
+            "type": "postback",
+            "title": element,
+            "payload": element
+        };
+        buttons.push(aux);
     });
 
     var elements = [{
-        "title": "Este é o nosso menu, escolha a opção desejada.",
-        "buttons": [{
-            "type": "postback",
-            "title": "Pizzas",
-            "payload": "sao paulo",
-        }, {
-            "type": "postback",
-            "title": "Sanduiches",
-            "payload": "rio de janeiro",
-        }, {
-            "type": "postback",
-            "title": "Refrigerantes",
-            "payload": "outro",
-        }],
+        "title": "Este é o nosso menu, escolha uma opção.",
+        "buttons": buttons
     }];
 
+    // var elements = [{
+    //     "title": "Este é o nosso menu, escolha uma opção.",
+    //     "buttons": [{
+    //         "type": "postback",
+    //         "title": "Pizzas",
+    //         "payload": "sao paulo",
+    //     }, {
+    //         "type": "postback",
+    //         "title": "Sanduiches",
+    //         "payload": "rio de janeiro",
+    //     }, {
+    //         "type": "postback",
+    //         "title": "Refrigerantes",
+    //         "payload": "outro",
+    //     }],
+    // }];
 
     let messageData = {
         "attachment": {

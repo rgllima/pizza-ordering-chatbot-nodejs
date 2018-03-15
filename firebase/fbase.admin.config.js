@@ -43,8 +43,8 @@ const getUserInfoInFirebase = (admin, idUser, callBack) => {
   var db = admin.database();
 
   db.ref("establishments/" + establishmentID + "/clientes/" + idUser + "/last_context_dialog").once("value", (snapshot) => {
-    console.log("InfoUserBaixado");
-    console.log(snapshot.val());
+    console.log("Informações do Usuário Atualizadas");
+    // console.log(snapshot.val());
     
     callBack(snapshot.val());
   }, (errorObject)=>{
