@@ -276,29 +276,19 @@ function buildCardsProdutos(sender, categoria) {
                 "image_url": value.productImage,
                 "buttons": [{
                     "type": "postback",
-                    "title": "Adicionar",
-                    "payload": key,
-                },
-                {
+                    "title": "Voltar ao Menu",
+                    "payload": 'Menu',
+                    },
+                    {
+                    "type": "postback",
+                    "title": "Ver Detalhes",
+                    "payload": 'Ver Detalhes',
+                    },
+                    {
                     "type": "postback",
                     "title": "Adicionar",
                     "payload": key,
-                },
-                {
-                    "type": "postback",
-                    "title": "Adicionar",
-                    "payload": key,
-                },
-                {
-                    "type": "postback",
-                    "title": "Adicionar",
-                    "payload": key,
-                },
-                {
-                    "type": "postback",
-                    "title": "Adicionar",
-                    "payload": key,
-                },]
+                    }]
             };
             elements.push(aux);
         }
