@@ -230,15 +230,6 @@ function buildTextMessage(sender, text_) {
     });
 }
 
-// Excluir depois - Forma de buscar os dados que eu quero no cardápio
-
-// Object.keys(this.productList).forEach((item) => {
-//     for (var [key, value] of Object.entries(this.productList[item])) { 
-//       // console.log(JSON.parse(JSON.stringify(value)));
-//       arrayAux.push(value)
-//     }
-//   });
-
 function buildCardsMenu(sender) {
     var elements = [];
 
@@ -287,7 +278,27 @@ function buildCardsProdutos(sender, categoria) {
                     "type": "postback",
                     "title": "Adicionar",
                     "payload": key,
-                }]
+                },
+                {
+                    "type": "postback",
+                    "title": "Adicionar",
+                    "payload": key,
+                },
+                {
+                    "type": "postback",
+                    "title": "Adicionar",
+                    "payload": key,
+                },
+                {
+                    "type": "postback",
+                    "title": "Adicionar",
+                    "payload": key,
+                },
+                {
+                    "type": "postback",
+                    "title": "Adicionar",
+                    "payload": key,
+                },]
             };
             elements.push(aux);
         }
