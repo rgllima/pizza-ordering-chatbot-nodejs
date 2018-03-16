@@ -92,7 +92,7 @@ function callWatson(text, sender) { //testando com o async
 
                 //enviando respostas personalizadas
                 if (results.intents[0].intent == "pedir_pizza") {
-                    buildCardMessage(sender);
+                    // buildCardMessage(sender);
                     break;
                 } else if (results.intents[0].intent == "ver_foto") {
                     sendImageMessage(sender);
@@ -151,7 +151,7 @@ app.post('/webhook/', (req, res) => {
                     break;
 
                 default:
-                    console.log("Evento de Postback Default!")
+                    console.log("Evento de Postback Default!" + event.postback.payload)
                     break;
             }
 
@@ -276,23 +276,22 @@ function buildCardsProdutos(sender, categoria) {
     for (var [key, value] of Object.entries(cardapio[categoria])) {
         console.log(key);
         console.log(value);
+
+        if (value.manageProductStock == 'Sim'){
+
+            var aux = {
+                "title": key,
+                "subtitle": value.productDescription,
+                "image_url": value.productImage,
+                "buttons": [{
+                    "type": "postback",
+                    "title": "Adicionar",
+                    "payload": key,
+                }]
+            };
+            elements.push(aux);
+        }
     }
-
-    // Object.keys(cardapio).forEach(element => {
-    //     console.log(element);
-
-    //     var aux = {
-    //         "title": element,
-    //         "subtitle": "Escolha essa opção para " + element + ".",
-    //         "image_url": "https://goo.gl/gy85bR",
-    //         "buttons": [{
-    //             "type": "postback",
-    //             "title": "Ver Produtos",
-    //             "payload": element,
-    //         }]
-    //     };
-    //     elements.push(aux);
-    // });
 
     var messageData = {
         "attachment": {
