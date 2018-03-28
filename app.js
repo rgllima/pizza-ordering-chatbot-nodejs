@@ -66,7 +66,7 @@ var w_conversation = new Conversation({
 });
 
 function callWatson(text, sender) {
-    console.log("Entrei em callWatson")
+    console.log("Entrei em callWatson");
 
     var payload = {
         workspace_id: process.env.WORKSPACE_ID,
@@ -88,7 +88,9 @@ function callWatson(text, sender) {
         if (results != null && results.output != null) {
             var i = 0;
             while (i < results.output.text.length) {
-                // console.log("\n Intenção: " + results.intents[0].intent + "\n"); //-----------------------------------------
+                // essa linha está aqui até eu descobrir qual erro que quebra o servidor
+                writeDataInFirebase(results, payload); //remover
+                console.log("\n Intenção: " + results.intents[0].intent + "\n"); //remover
 
                 //enviando respostas personalizadas
                 if (results.intents[0].intent == "pedir_pizza") {
@@ -104,7 +106,8 @@ function callWatson(text, sender) {
                 } else buildTextMessage(sender, results.output.text[i++]);
             }
         }
-        writeDataInFirebase(results, payload); //Escrever informações no banco de dados
+        // essa linha estará comentada, até eu descobrir qual é o erro que quebra o servidor
+        // writeDataInFirebase(results, payload); //Escrever informações no banco de dados
     });
 }
 
@@ -152,13 +155,9 @@ app.post('/webhook/', (req, res) => {
                     break;
 
                 default:
-                    console.log("Evento de Postback Default! " + postbackPayload)
                     text = postbackPayload;
                     break;
             }
-
-            console.log("Evento de PostBack");
-            console.log(event.postback);
 
             sendMessage(sender, {
                 text: 'Você escolheu ' + postbackPayload // remover -------------
@@ -177,7 +176,6 @@ app.post('/webhook/', (req, res) => {
             setTimeout(() => {
 
                 console.log("Contexto Atualizado");
-                // console.log(contexto_atual);
                 callWatson(text, sender);
             }, 1500);
         } else callWatson(text, sender) //pegar as informações do usuário
@@ -234,7 +232,6 @@ function buildCardsMenu(sender) {
     var elements = [];
 
     Object.keys(cardapio).forEach(element => {
-        console.log(element);
 
         var aux = {
             "title": element,
@@ -265,8 +262,6 @@ function buildCardsProdutos(sender, categoria) {
     var elements = [];
 
     for (var [key, value] of Object.entries(cardapio[categoria])) {
-        console.log(key);
-        console.log(value);
 
         if (value.manageProductStock == 'Sim'){
 
