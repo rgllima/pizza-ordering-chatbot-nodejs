@@ -65,7 +65,7 @@ var w_conversation = new Conversation({
     version: 'v1'
 });
 
-function callWatson(text, sender) { //testando com o async
+function callWatson(text, sender) {
     console.log("Entrei em callWatson")
 
     var payload = {
@@ -92,7 +92,7 @@ function callWatson(text, sender) { //testando com o async
 
                 //enviando respostas personalizadas
                 if (results.intents[0].intent == "pedir_pizza") {
-                    // buildCardMessage(sender);
+                    buildCardsProdutos(sender, 'Pizza');
                     break;
                 } else if (results.intents[0].intent == "ver_foto") {
                     sendImageMessage(sender);
@@ -144,24 +144,24 @@ app.post('/webhook/', (req, res) => {
             text = event.message.text;
 
         else if (event.postback && !text) {
-            // Usar switch case para pegar evento do webhook
+            var postbackPayload = event.postback.payload;
+
             switch (event.postback.title) {
                 case 'Ver Produtos':
-                    buildCardsProdutos(sender, event.postback.payload);
+                    buildCardsProdutos(sender, postbackPayload);
                     break;
 
                 default:
-                    console.log("Evento de Postback Default!" + event.postback.payload)
+                    console.log("Evento de Postback Default! " + postbackPayload)
+                    text = postbackPayload;
                     break;
             }
 
-            text = event.postback.payload;
             console.log("Evento de PostBack");
-            console.log(event);
             console.log(event.postback);
 
             sendMessage(sender, {
-                text: 'Você escolheu ' + text // remover -------------
+                text: 'Você escolheu ' + postbackPayload // remover -------------
             });
             // break;
         } else break;
@@ -272,7 +272,7 @@ function buildCardsProdutos(sender, categoria) {
 
             var aux = {
                 "title": key,
-                "subtitle": value.productDescription,
+                "subtitle": "R$ " + value.price,
                 "image_url": value.productImage,
                 "buttons": [{
                     "type": "postback",
