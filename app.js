@@ -88,7 +88,7 @@ function callWatson(text, sender) {
         if (results != null && results.output != null) {
             var i = 0;
             while (i < results.output.text.length) {
-                console.log("\n Intenção: " + results.intents[0].intent + "\n"); //-----------------------------------------
+                // console.log("\n Intenção: " + results.intents[0].intent + "\n"); //-----------------------------------------
 
                 //enviando respostas personalizadas
                 if (results.intents[0].intent == "pedir_pizza") {
