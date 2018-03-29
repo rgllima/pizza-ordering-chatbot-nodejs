@@ -88,8 +88,7 @@ function callWatson(text, sender) {
         if (results != null && results.output != null) {
             var i = 0;
             while (i < results.output.text.length) {
-                // essa linha está aqui até eu descobrir qual erro que quebra o servidor
-                writeDataInFirebase(results, payload); //remover
+               
                 console.log("\n Intenção: " + results.intents[0].intent + "\n"); //remover
 
                 //enviando respostas personalizadas
@@ -106,8 +105,7 @@ function callWatson(text, sender) {
                 } else buildTextMessage(sender, results.output.text[i++]);
             }
         }
-        // essa linha estará comentada, até eu descobrir qual é o erro que quebra o servidor
-        // writeDataInFirebase(results, payload); //Escrever informações no banco de dados
+        writeDataInFirebase(results, payload); //Escrever informações no banco de dados
     });
 }
 
@@ -147,22 +145,20 @@ app.post('/webhook/', (req, res) => {
             text = event.message.text;
 
         else if (event.postback && !text) {
-            var postbackPayload = event.postback.payload;
+            text = event.postback.payload;
 
             switch (event.postback.title) {
                 case 'Ver Produtos':
-                    buildCardsProdutos(sender, postbackPayload);
+                    buildCardsProdutos(sender, text);
                     break;
-
+                    
                 default:
-                    text = postbackPayload;
                     break;
             }
-
             sendMessage(sender, {
-                text: 'Você escolheu ' + postbackPayload // remover -------------
+                text: 'Você escolheu ' + text// remover -------------
             });
-            // break;
+            break;
         } else break;
 
 
