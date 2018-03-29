@@ -146,19 +146,21 @@ app.post('/webhook/', (req, res) => {
 
         else if (event.postback && !text) {
             text = event.postback.payload;
+            var flag = false;
 
             switch (event.postback.title) {
                 case 'Ver Produtos':
                     buildCardsProdutos(sender, text);
+                    flag = true;
                     break;
-                    
+
                 default:
                     break;
             }
             sendMessage(sender, {
                 text: 'Você escolheu ' + text// remover -------------
             });
-            break;
+            if (flag) break; // parar a execução em situações específicas
         } else break;
 
 
