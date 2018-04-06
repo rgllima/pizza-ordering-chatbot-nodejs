@@ -23,14 +23,14 @@ const sendMessage = (sender, messageData) => {
     });
 };
 
-const getUserInfo = (sender) => {
+const getUserInfo = (sender, callback) => {
     var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.FB_TOKEN;
     request({
         url: usersPublicProfile,
         json: true
     }, (error, response, body) => {
         if (!error && response.statusCode === 200) {
-            infoUsuario = body;
+            callback(body);
         }
     });
 };

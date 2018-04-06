@@ -141,7 +141,9 @@ app.post('/webhook/', (req, res) => {
         // retirar o setTimeout, estudar formas de retirá-lo
 
         if (infoUsuario == null || sender != infoUsuario.id) {
-            facebookGraphApi.getUserInfo(sender);
+            facebookGraphApi.getUserInfo(sender, (user) => {
+                infoUsuario = user;
+            });
 
             readDataInFirebase(sender); // Buscar contexto da conversa
 
