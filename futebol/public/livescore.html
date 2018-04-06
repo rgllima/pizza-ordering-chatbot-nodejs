@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <title>Messenger Demo</title>
+  </head>
+  <body>
+    <link rel="stylesheet" href="./livescore.css">
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId: '184003775656085',
+          xfbml: true,
+          version: 'v2.6'
+        });
+      };
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.com/en_US/messenger.Extensions.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'Messenger'));
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.0"></script>
+    
+
+    <div id="app">
+
+      <div id="content">
+          <div id="title">
+            <h1>Jogos Ao Vivo</h1>
+          </div>
+          <div id="livescores">
+            <div>
+              <p>{{liga}}</p>
+              <div>
+                <img src="" alt="">
+              </div>
+              <div>
+                  <img src="" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+
+    </div>
+
+    
+
+    <div>
+      <p>The "Message Us" plugin takes the user directly to Messenger and into a thread with your Page.</p>
+    </div>
+    
+    <script src="./livescore.js"></script>
+  </body>
+</html>
