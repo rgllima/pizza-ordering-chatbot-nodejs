@@ -1,27 +1,32 @@
+/**
+ * ESSE ARQUIVO DIZ RESPEITO AO CHATBOT DE FUTEBOL
+ * ESTÁ SENDO UTILIZADO COMO FORMA DE SUBSTITUIR 
+ * TEMPORARIAMENTE AS MODIFICAÇÕES DO FACEBOOK MESSENGER
+ */
+
 /*eslint-env node*/
 
-/**
- * Importando o módulo do firebase e inicializando o usuário
- * Inicializando configurações do Facebook
- */
 var firebase = require('./firebase/fbase.admin.config.js')
 var admin = firebase.connectToFirebase();
-var FB = require('fb');
-FB.setAccessToken(process.env.FB_TOKEN);
+// var FB = require('fb');
+// FB.setAccessToken(process.env.FB_TOKEN);
 
 var express = require('express');
-var request = require('request');
 var bodyParser = require('body-parser');
 
 var Conversation = require('watson-developer-cloud/conversation/v1');
 
 var app = express();
+
 app.use(bodyParser.urlencoded({
     extended: false
 }))
 app.use(bodyParser.json())
+
 // start server on the specified port and binding host
 app.listen(process.env.PORT || 5000, () => console.log('webhook está ouvindo'));
+
+var facebookGraphApi = require('./facebook-graph-api.js');
 
 var infoUsuario = null;
 var contexto_atual = null;
@@ -36,7 +41,7 @@ app.get("/", function (req, res) {
 //---------------------Firebase-----------------------------
 function writeDataInFirebase(results, payld) {
     // salvar os pedidos dos usuários
-    firebase.salvarPedidos(admin, results, infoUsuario, payld);
+    firebase.salvarLogsSistema(admin, results, infoUsuario, payld);
 
     // salvar contexto da conversa e info usuário no firebase
     firebase.setUserInfoInFirebase(admin, infoUsuario, contexto_atual);
@@ -60,8 +65,8 @@ function readDataInFirebase(sender) {
 var w_conversation = new Conversation({
     url: 'https://gateway.watsonplatform.net/conversation/api',
     version_date: '2017-04-21',
-    username: process.env.CONVERSATION_USERNAME,
-    password: process.env.CONVERSATION_PASSWORD,
+    username: '1ab794a0-48ee-4938-bfb9-641b923538b0',
+    password: 'WX5d4ZmXkaAP',
     version: 'v1'
 });
 
@@ -69,7 +74,7 @@ function callWatson(text, sender) {
     console.log("Entrei em callWatson");
 
     var payload = {
-        workspace_id: process.env.WORKSPACE_ID,
+        workspace_id: '4fc06459-efd2-4b00-a801-cbbcee031934',
         context: contexto_atual || {
             "nomeUser": infoUsuario.first_name
         }, //rever isso aki-------------
@@ -92,17 +97,10 @@ function callWatson(text, sender) {
                 console.log("\n Intenção: " + results.intents[0].intent + "\n"); //remover
 
                 //enviando respostas personalizadas
-                if (results.intents[0].intent == "pedir_pizza") {
-                    buildCardsProdutos(sender, 'Pizza');
+                if (results.intents[0].intent == "iniciar") {
+                    facebookGraphApi.buildButtonMessage(sender, results.output.text[i++]);
                     break;
-                } else if (results.intents[0].intent == "ver_foto") {
-                    sendImageMessage(sender);
-                    break;
-                } else if (results.intents[0].intent == "menu") {
-                    buildTextMessage(sender, results.output.text[i++]);
-                    buildCardsMenu(sender);
-                    break;
-                } else buildTextMessage(sender, results.output.text[i++]);
+                } else facebookGraphApi.buildTextMessage(sender, results.output.text[i++]);
             }
         }
         writeDataInFirebase(results, payload); //Escrever informações no banco de dados
@@ -134,15 +132,15 @@ app.post('/webhook/', (req, res) => {
             text = event.postback.payload;
             var flag = false;
 
-            switch (event.postback.title) {
-                case 'Ver Produtos':
-                    buildCardsProdutos(sender, text);
-                    flag = true;
-                    break;
+            // switch (event.postback.title) {
+            //     case 'Ver Produtos':
+            //         buildCardsProdutos(sender, text);
+            //         flag = true;
+            //         break;
 
-                default:
-                    break;
-            }
+            //     default:
+            //         break;
+            // }
             sendMessage(sender, {
                 text: 'Você escolheu ' + text// remover -------------
             });
@@ -153,7 +151,7 @@ app.post('/webhook/', (req, res) => {
         // retirar o setTimeout, estudar formas de retirá-lo
 
         if (infoUsuario == null || sender != infoUsuario.id) {
-            getUserInfo(sender);
+            facebookGraphApi.getUserInfo(sender);
 
             readDataInFirebase(sender); // Buscar contexto da conversa
 
@@ -167,50 +165,31 @@ app.post('/webhook/', (req, res) => {
     res.sendStatus(200);
 });
 
-//------------------------------ Facebook API Graph ----------------------------------------
+//------------------------------ Facebook API Graph ---------------------------------------
+// function getUserInfo(sender) {
+//     var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.FB_TOKEN;
+//     request({
+//         url: usersPublicProfile,
+//         json: true
+//     }, (error, response, body) => {
+//         if (!error && response.statusCode === 200) {
+//             infoUsuario = body;
+//         }
+//     });
+// };
 
-function sendMessage(sender, messageData) {
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {
-            access_token: process.env.FB_TOKEN
-        },
-        method: 'POST',
-        json: {
-            recipient: {
-                id: sender
-            },
-            message: messageData,
-        }
-    }, function (error, response, body) {
-        if (error) {
-            console.log('Erro no envio da mensagem ', error);
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error);
-        }
-    });
-};
 
-function getUserInfo(sender) {
-    var usersPublicProfile = 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + process.env.FB_TOKEN;
-    request({
-        url: usersPublicProfile,
-        json: true
-    }, (error, response, body) => {
-        if (!error && response.statusCode === 200) {
-            infoUsuario = body;
-        }
-    });
-};
+// function buildTextMessage(sender, text_) {
+//     text_ = text_.substring(0, 319);
 
-function buildTextMessage(sender, text_) {
-    text_ = text_.substring(0, 319);
-
-    sendMessage(sender, {
-        text: text_
-    });
-}
+//     sendMessage(sender, {
+//         text: text_
+//     });
+// }
 
 function buildCardsMenu(sender) {
     var elements = [];
@@ -309,63 +288,4 @@ function buildCardMessage(sender) {
         }
     }
     sendMessage(sender, messageData);
-}
-
-/*
- * Send an image using the Send API.
- *
- */
-function sendImageMessage(sender) {
-    var messageData = {
-        "attachment": {
-            "type": "image",
-            "payload": {
-                "url": infoUsuario.profile_pic
-            }
-        }
-    }
-    sendMessage(sender, messageData);
-};
-
-/*
- * Send a button message using the Send API.
- *
- */
-function buildButtonMessage(recipientId, text, buttons) {
-    var messageData = {
-        attachment: {
-            "type": "template",
-            "payload": {
-                "template_type": "button",
-                "text": text,
-                "buttons": buttons
-            }
-        }
-    }
-};
-/*
- * Turn typing indicator on
- *
- */
-function sendTypingOn(sender) {
-
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {
-            access_token: process.env.FB_TOKEN
-        },
-        method: 'POST',
-        json: {
-            recipient: {
-                id: sender
-            },
-            sender_action: "typing_on",
-        }
-    }, function (error, response, body) {
-        if (error) {
-            console.log('Erro no envio da mensagem ', error);
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error);
-        }
-    });
 }
