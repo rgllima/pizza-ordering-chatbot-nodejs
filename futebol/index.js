@@ -31,8 +31,6 @@ var facebookGraphApi = require('./facebook-graph-api.js');
 var infoUsuario = null;
 var contexto_atual = null;
 
-var cardapio = null; // variável que contém o cardápio do estabelecimento;
-
 // remover isso aki
 app.get("/", function (req, res) {
     res.send("Deployed!");
@@ -52,14 +50,6 @@ function readDataInFirebase(sender) {
     firebase.getUserInfoInFirebase(admin, sender, (context) => {
         contexto_atual = context;
     });
-
-    // buscar cardápio no firebase;
-    if (cardapio == null) {
-        firebase.getCardapioFirebase(admin, (novoCardapio) => {
-            cardapio = novoCardapio;
-            console.log('Cardápio Atualizado');
-        });
-    }
 }
 //---------------------Watson------------------------------
 var w_conversation = new Conversation({
