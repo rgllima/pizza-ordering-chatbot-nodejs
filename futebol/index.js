@@ -115,7 +115,7 @@ app.get('/webview', (req, res, next) => {
         } else if (referer.indexOf('www.facebook.com') >= 0) {
             res.setHeader('X-Frame-Options', 'ALLOW-FROM https://www.facebook.com/');
         }
-        res.sendFile('public/options.html', {root: __dirname});
+        res.sendFile('public/index.html', {root: __dirname});
     }
 });
 //-----------------------------------------------------------------------------------
