@@ -122,17 +122,16 @@ app.post('/webhook/', (req, res) => {
         else if (event.postback && !text) {
             text = event.postback.payload;
             var flag = false;
+            // event.postback.title;
 
-            // switch (event.postback.title) {
-            //     case 'Ver Produtos':
-            //         buildCardsProdutos(sender, text);
-            //         flag = true;
-            //         break;
-
-            //     default:
-            //         break;
-            // }
-            sendMessage(sender, {
+            switch (event.postback.payload) {
+                case 'iniciar':
+                    flag = true;
+                    break;
+                default:
+                    break;
+            }
+            facebookGraphApi.sendMessage(sender, {
                 text: 'Você escolheu ' + text// remover -------------
             });
             if (flag) break; // parar a execução em situações específicas

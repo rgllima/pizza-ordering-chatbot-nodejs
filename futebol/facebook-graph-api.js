@@ -53,8 +53,8 @@ const buildButtonMessage = (sender, text) => {
         buttons: [
           {
             type: "postback",
-            title: "<BUTTON_TEXT>",
-            payload: "<STRING_SENT_TO_WEBHOOK>"
+            title: "Escolher Time",
+            payload: "iniciar"
           }
         ]
       }
@@ -62,12 +62,39 @@ const buildButtonMessage = (sender, text) => {
   };
   sendMessage(sender, messageData);
 };
+const webview = () => {
+  var messageData = {
+    "attachment":{
+      "type":"template",
+      "payload":{
+        "template_type":"generic",
+        "elements": [{
+          "title":"Testing webview",
+          "default_action":{
+            "type":"web_url",
+            "webview_height_ratio": "full",
+            "messenger_extensions": true,
+            "url":"https://plenty.life/webview"
+          },
+          "buttons":[{
+            "type":"web_url",
+            "webview_height_ratio": "full",
+            "messenger_extensions": true,
+            "url":"https://plenty.life/webview",
+            "title":"Test"
+          }]
+        }]
+      }
+    }
+  }
+};
 
 module.exports = {
   sendMessage,
   getUserInfo,
   buildTextMessage,
-  buildButtonMessage
+  buildButtonMessage,
+  webview
 };
 
 //   /*
