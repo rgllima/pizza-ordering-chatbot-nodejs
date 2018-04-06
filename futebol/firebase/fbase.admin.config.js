@@ -14,7 +14,7 @@ const connectToFirebase = () => {
 const salvarLogsSistema = (admin, respostaWatson, userInfo, payld) => {
   var db = admin.database();
   var data = new Date();
-  var dataNow = data.getDate + '-' + data.getMonth + '-' + data.getFullYear
+  var dataNow = data.getDate() + '-' + data.getMonth() + '-' + data.getFullYear()
 
   if (respostaWatson != null) {
     var id = respostaWatson.context.conversation_id;

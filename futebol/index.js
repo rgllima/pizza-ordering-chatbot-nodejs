@@ -88,6 +88,7 @@ function callWatson(text, sender) {
 
                 //enviando respostas personalizadas
                 if (results.intents[0].intent == "iniciar") {
+                    console.log("Respondendo o Cara");
                     facebookGraphApi.buildButtonMessage(sender, results.output.text[i++]);
                     break;
                 } else facebookGraphApi.buildTextMessage(sender, results.output.text[i++]);
