@@ -43,7 +43,7 @@ const buildTextMessage = (sender, text_) => {
     });
 }
 
-const buildButtonMessage = (sender, text) => {
+const buildButtonMessage = (sender, text, SERVER_URL) => {
   var messageData = {
     attachment: {
       type: "template",
@@ -52,9 +52,11 @@ const buildButtonMessage = (sender, text) => {
         text: text,
         buttons: [
           {
-            type: "postback",
-            title: "Escolher Time",
-            payload: "iniciar"
+            "type":"web_url",
+            "webview_height_ratio": "full",
+            "messenger_extensions": true,
+            "url":SERVER_URL + "/webview",
+            "title":"Escolher Time"
           }
         ]
       }

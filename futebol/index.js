@@ -90,7 +90,7 @@ function callWatson(text, sender) {
                 //enviando respostas personalizadas
                 if (results.intents[0].intent == "iniciar") {
                     console.log("Respondendo o Cara");
-                    facebookGraphApi.buildButtonMessage(sender, results.output.text[i++]);
+                    facebookGraphApi.buildButtonMessage(sender, results.output.text[i++], SERVER_URL);
                     break;
                 } else facebookGraphApi.buildTextMessage(sender, results.output.text[i++]);
             }
@@ -137,14 +137,14 @@ app.post('/webhook/', (req, res) => {
             var flag = false;
             // event.postback.title;
 
-            switch (event.postback.payload) {
-                case 'iniciar':
-                facebookGraphApi.webview(sender, SERVER_URL);
-                    flag = true;
-                    break;
-                default:
-                    break;
-            }
+            // switch (event.postback.payload) {
+            //     case 'iniciar':
+            //     facebookGraphApi.webview(sender, SERVER_URL);
+            //         flag = true;
+            //         break;
+            //     default:
+            //         break;
+            // }
             facebookGraphApi.sendMessage(sender, {
                 text: 'Você escolheu ' + text// remover -------------
             });
