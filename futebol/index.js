@@ -123,7 +123,7 @@ app.post('/webhook/', (req, res) => {
         event = req.body.entry[0].messaging[i];
         sender = event.sender.id;
 
-        sendTypingOn(sender); // sinalização de que o bot está digitando
+        //sendTypingOn(sender); // sinalização de que o bot está digitando
 
         if (event.message && event.message.text)
             text = event.message.text;
