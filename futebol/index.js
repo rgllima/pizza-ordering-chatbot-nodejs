@@ -27,6 +27,7 @@ app.use(bodyParser.json())
 app.listen(process.env.PORT || 5000, () => console.log('webhook está ouvindo'));
 
 var facebookGraphApi = require('./facebook-graph-api.js');
+const SERVER_URL = process.env.SERVER_URL;
 
 var infoUsuario = null;
 var contexto_atual = null;
@@ -105,7 +106,19 @@ app.get('/webhook/', function (req, res) {
         res.send(req.query['hub.challenge']);
     res.send('Erro de validação no token.');
 });
-
+//------------------------------TESTANDO AKI----------------------------------------
+app.get('/webview', (req, res, next) => {
+    let referer = req.get('Referer');
+    if (referer) {
+        if (referer.indexOf('www.messenger.com') >= 0) {
+            res.setHeader('X-Frame-Options', 'ALLOW-FROM https://www.messenger.com/');
+        } else if (referer.indexOf('www.facebook.com') >= 0) {
+            res.setHeader('X-Frame-Options', 'ALLOW-FROM https://www.facebook.com/');
+        }
+        res.sendFile('public/options.html', {root: __dirname});
+    }
+});
+//-----------------------------------------------------------------------------------
 app.post('/webhook/', (req, res) => {
     var text = null;
 
@@ -126,6 +139,7 @@ app.post('/webhook/', (req, res) => {
 
             switch (event.postback.payload) {
                 case 'iniciar':
+                facebookGraphApi.webview(sender, SERVER_URL);
                     flag = true;
                     break;
                 default:

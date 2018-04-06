@@ -62,7 +62,7 @@ const buildButtonMessage = (sender, text) => {
   };
   sendMessage(sender, messageData);
 };
-const webview = () => {
+const webview = (sender, SERVER_URL) => {
   var messageData = {
     "attachment":{
       "type":"template",
@@ -74,19 +74,20 @@ const webview = () => {
             "type":"web_url",
             "webview_height_ratio": "full",
             "messenger_extensions": true,
-            "url":"https://plenty.life/webview"
+            "url": SERVER_URL + "/webview"
           },
           "buttons":[{
             "type":"web_url",
             "webview_height_ratio": "full",
             "messenger_extensions": true,
-            "url":"https://plenty.life/webview",
+            "url":SERVER_URL + "/webview",
             "title":"Test"
           }]
         }]
       }
     }
   }
+  sendMessage(sender, messageData);
 };
 
 module.exports = {
