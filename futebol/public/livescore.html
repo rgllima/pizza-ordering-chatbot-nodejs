@@ -14,65 +14,114 @@
             <h1>Jogos Ao Vivo</h1>
           </div>
           <div id="livescores">
-            <div>
-              <p>{{liga}}</p>
-              <div>
-                <img src="" alt="">
-              </div>
-              <div>
-                  <img src="" alt="">
-              </div>
-            </div>
+            <table class="tabela-jogos">
+              <tbody>
+                <tr class="table-line" v-for="item in liveScores">
+                  <td class="box-time">
+                      <div>
+                        <img src="./../assets/goal_icon.png">
+                        <p>{{item.home_name}}</p>
+                      </div>
+                  </td>
+                  <td class="box-score">
+                      <div>
+                        <h2>{{item.league_name}}</h2>
+                        <h3>{{item.score}}</h3>
+                        <p>{{item.time}}'</p>
+                      </div>
+                  </td>
+                  <td class="box-time">
+                      <div>
+                        <img src="./../assets/goal_icon.png">
+                        <p>{{item.away_name}}</p>
+                      </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
-    </div>
-
-    
-
-    <div>
-      <p>The "Message Us" plugin takes the user directly to Messenger and into a thread with your Page.</p>
     </div>
     
     <script>
       new Vue({
         el: '#app',
         data: {
-          liga: 'Serie A',
           liveScores: []
         },
         mounted () {
-            console.log('teste');
-            console.log(document.getElementById('livescores'))
-            this.$http.get('http://livescore-api.com/api-client/scores/live.json?key=6WjGWWrPHEX9YJVq&secret=mmRh1Fk2aEqxahqgdJX9GoZn3Xw1Grs2').then(
-              response => {
-                  console.log("Ok. Baixado");
-                  this.liveScores = response.body.data.match;
-                  console.log(this.liveScores)
-              },
-              error => {
-                  console.log(error);
-              })
+          console.log('teste');
+          console.log(document.getElementById('livescores'))
+          this.$http.get('http://livescore-api.com/api-client/scores/live.json?key=6WjGWWrPHEX9YJVq&secret=mmRh1Fk2aEqxahqgdJX9GoZn3Xw1Grs2').then(
+            response => {
+                console.log("Ok. Baixado");
+                this.liveScores = response.body.data.match;
+                console.log(this.liveScores)
+            },
+            error => {
+                console.log(error);
+            }
+          )
         }
       })
 
-      // JSON.parse(body).data.match.forEach(element => {
-      //     if (element.status != 'FINISHED') {
-      //       message += list + '. ' + element.home_name + " " + element.score + " " + element.away_name + "\n"
-      //       list++;
-      //     }
-      //   });
+      
     </script>
     <style>
       body {
-        background-color: #5cbd00;
+        background-color: rgb(197, 166, 109);
+        width: 97%;
+        height: auto;
+        padding: 5px;
+        box-sizing: border-box;
+      }
+      h1, h2, h3, p, td {
+        margin: 0;
+        padding: 0;
       }
       .content {
-        padding: 5px;
+        width: 100%;
+        height: auto;
       }
       #title {
         text-align: center;
         font-size: 12px;
+        margin-bottom: 15px;
+      }
+      .table-line {
+        display: block;
+        width: 100%;
+        height: auto;
+        margin-bottom: 5px;
+        background-color: rgba(255, 245, 226, 0.62);
+        border-radius: 10px;
+      }
+      .box-time {
+        width: 27%;
+        height: 125px;
+      }
+      .box-time div img{
+        width: 48%;
+        height: auto;
+        margin-left: 25%;
+      }
+      .box-time p {
+        margin-top: 2px;
+        font-size: 11px;
+        text-align: center;
+      }
+      .box-score{
+        width: 46%;
+        height: 100%;
+        text-align: center;
+      }
+      .box-score div h2 {
+        font-size: 13px;
+      }
+      .box-score div h3 {
+        margin-top: 20px;
+        font-size: 30px;
       }
     </style>
 
