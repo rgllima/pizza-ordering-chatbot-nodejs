@@ -3,9 +3,7 @@
   <head>
     <title>Messenger Demo</title>
   </head>
-  <body>
-    <link rel="stylesheet" href="./livescore.css">
-    
+  <body>    
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.0"></script>
 
@@ -36,7 +34,47 @@
       <p>The "Message Us" plugin takes the user directly to Messenger and into a thread with your Page.</p>
     </div>
     
-    <script src="./livescore.js"></script>
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          liga: 'Serie A',
+          liveScores: []
+        },
+        mounted () {
+            console.log('teste');
+            console.log(document.getElementById('livescores'))
+            this.$http.get('http://livescore-api.com/api-client/scores/live.json?key=6WjGWWrPHEX9YJVq&secret=mmRh1Fk2aEqxahqgdJX9GoZn3Xw1Grs2').then(
+              response => {
+                  console.log("Ok. Baixado");
+                  this.liveScores = response.body.data.match;
+                  console.log(this.liveScores)
+              },
+              error => {
+                  console.log(error);
+              })
+        }
+      })
+
+      // JSON.parse(body).data.match.forEach(element => {
+      //     if (element.status != 'FINISHED') {
+      //       message += list + '. ' + element.home_name + " " + element.score + " " + element.away_name + "\n"
+      //       list++;
+      //     }
+      //   });
+    </script>
+    <style>
+      body {
+        background-color: #5cbd00;
+      }
+      .content {
+        padding: 5px;
+      }
+      #title {
+        text-align: center;
+        font-size: 12px;
+      }
+    </style>
 
     <script>
         window.fbAsyncInit = function() {
