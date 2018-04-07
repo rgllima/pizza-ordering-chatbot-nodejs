@@ -23,6 +23,8 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(bodyParser.json())
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 // start server on the specified port and binding host
 app.listen(process.env.PORT || 5000, () => console.log('webhook está ouvindo'));
 
