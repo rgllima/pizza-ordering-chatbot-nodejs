@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Jogos ao Vivo</title>
+    <title>Tabela de Jogos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Compiled and minified CSS -->
@@ -19,7 +19,7 @@
     <div id="app">
         <section>
             <div class="title">
-                <h1>Jogos ao Vivo</h1>
+                <h1>Tabela de Jogos</h1>
             </div>
             <div class="select-league">
                 <div class="input-field col s12">
@@ -35,24 +35,26 @@
                     </select>
                 </div>
             </div>
+            <div class="play-date">
+                <input type="text" class="datepicker">
+            </div>
             <table>
                 <tbody>
-                    <tr class="tr-box-team" v-for="item in liveScores">
+                    <tr class="tr-box-team">
                         <td class="td-team team1">
-                            <!-- <p>Terminou 20:50</p> -->
-                            <p>{{item.time}}'</p>
-                            <h2>{{item.home_name}}</h2>
+                            <p>Terminou 20:50</p>
+                            <h2>Corinthians</h2>
                         </td>
-                        <td class="td-icon-team"><img src="https://icon-icons.com/icons2/716/PNG/512/Goal_icon-icons.com_62267.png" alt=""></td>
+                        <td class="td-icon-team"><img src="./assets/goal_icon.png" alt=""></td>
                         <td class="td-scoreboard">
                            <div>
-                               <p>{{item.score}}</p>
+                               <p>2 - 1</p>
                             </div>
                         </td>
-                        <td class="td-icon-team"><img src="https://icon-icons.com/icons2/716/PNG/512/Goal_icon-icons.com_62267.png" alt=""></td>
+                        <td class="td-icon-team"><img src="./assets/goal_icon.png" alt=""></td>
                         <td class="td-team team2">
-                            <p style="color:white">.</p>
-                            <h2>{{item.away_name}}</h2>
+                            <p style="color: white">.</p>
+                            <h2>Palmeiras</h2>
                         </td>
                     </tr>
 
@@ -65,24 +67,14 @@
     new Vue({
         el: '#app',
         data: {
-          liveScores: []
+
         },
         mounted () {
             var elem = document.querySelector('select');
             var instance = M.FormSelect.init(elem, "options");
 
-          console.log('teste');
-          console.log(document.getElementById('livescores'))
-          this.$http.get('http://livescore-api.com/api-client/scores/live.json?key=6WjGWWrPHEX9YJVq&secret=mmRh1Fk2aEqxahqgdJX9GoZn3Xw1Grs2').then(
-            response => {
-                console.log("Ok. Baixado");
-                this.liveScores = response.body.data.match;
-                console.log(this.liveScores)
-            },
-            error => {
-                console.log(error);
-            }
-          )
+            var elem2 = document.querySelector('.datepicker');
+            var instance2 = M.Datepicker.init(elem2, "options");
         }
     })        
 </script>
@@ -116,6 +108,12 @@ table {
     margin-left: 5px;
     float: left;
 }
+.play-date {
+    width: 35%;
+    margin-right: 5px;
+    margin-top: 14px;
+    float: right;
+}
 .tr-box-team {
     width: 100%;
     height: auto;
@@ -139,7 +137,7 @@ table {
 .team1 p {
     font-size: 12px;
     text-align: left;
-    color: green;
+    color: #f91007;
 }
 .team2 {
     padding-left: 5px;
@@ -162,7 +160,7 @@ table {
     margin-left: 4px;
     margin-right: 4px;
     border-radius: 4px;
-    background-color: green;
+    background-color: #f91007;
     color: white;
     line-height: 30px;
 }
@@ -170,20 +168,4 @@ table {
     font-size: 100%;
 }
 </style>
-<script>
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId: '184003775656085',
-        xfbml: true,
-        version: 'v2.6'
-      });
-    };
-    (function(d, s, id){
-       var js, fjs = d.getElementsByTagName(s)[0];
-       if (d.getElementById(id)) {return;}
-       js = d.createElement(s); js.id = id;
-       js.src = "//connect.facebook.com/en_US/messenger.Extensions.js";
-       fjs.parentNode.insertBefore(js, fjs);
-     }(document, 'script', 'Messenger'));
-  </script>
 </html>

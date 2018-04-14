@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Escolha um Time</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.0"></script>
+</head>
+<body>
+    <div id="app">
+        <section>
+            <div class="title">
+                <h1>Escolha um Time para Receber Notificações</h1>
+            </div>
+            <div class="select-league">
+                <div class="input-field col s12">
+                    <select>
+                        <option value="">Escolha uma Liga</option>
+                        <optgroup label="Brasil">
+                            <option value="1">Serie A</option>
+                            <option value="2">Copa do Brasil</option>
+                        </optgroup>
+                        <optgroup label="Espanha">
+                            <option value="3">Serie A</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+            <div class="button-submit">
+                <button class="btn waves-effect waves-light" type="submit" name="action">Salvar</button>
+            </div>
+            <table>
+                <tbody>
+                    <tr class="tr-box-team">
+                        <td class="td-icon-team"><img src="./assets/goal_icon.png" alt=""></td>
+                        <td class="td-info-team">
+                            <h2>Corinthians</h2>
+                            <p>Alguma Informação</p>
+                        </td>
+                        <td class="select-team">
+                            <!-- Switch -->
+                            <div class="switch">
+                                <label>
+                                    <input type="checkbox">
+                                    <span class="lever"></span>
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="tr-box-team">
+                        <td class="td-icon-team"><img src="./assets/goal_icon.png" alt=""></td>
+                        <td class="td-info-team">
+                            <h2>Corinthians</h2>
+                            <p>Alguma Informação</p>
+                        </td>
+                        <td class="select-team">
+                            <!-- Switch -->
+                            <div class="switch">
+                                <label>
+                                    <input type="checkbox">
+                                    <span class="lever"></span>
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+
+        },
+        mounted () {
+            var elem = document.querySelector('select');
+            var instance = M.FormSelect.init(elem, "options");
+        }
+    })        
+</script>
+<style>
+p, h1, h2, h4, table, tbody, thead, tr, td {
+    margin: 0;
+	padding: 0;
+	border: 0;
+}
+body{
+    background-color: #dee5eb;
+    padding: 10px;
+}
+#app{
+    width: 100%;
+    height: auto;
+}
+table {
+    width: 100%;
+    height: 100%;
+}
+.title {
+    text-align: center;
+    color:#2b3441;
+}
+.title h1 {
+    font-size: 1.5rem;
+}
+.select-league {
+    width: 60%;
+    margin-left: 5px;
+    float: left;
+}
+.button-submit {
+    margin-top: 20px;
+    margin-right: 5px;
+    float: right;
+}
+.tr-box-team {
+    width: 100%;
+    height: 70px;
+    display: block;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    background-color: white;
+}
+.td-icon-team img {
+    width: 60px;
+    height: auto;
+    margin-top: 3px;
+    margin-left: 5px;
+    margin-right: 10px;
+}
+.td-info-team {
+    width: 65%;
+}
+.td-info-team h2 {
+    font-size: 20px;
+    color: #202833;
+}
+.td-info-team p {
+    font-size: 12px;
+    margin-top: 5px;
+    color: #a7aab1;
+}
+.select-team {
+    width: 20%;
+    overflow: hidden;
+}
+</style>
+</html>
