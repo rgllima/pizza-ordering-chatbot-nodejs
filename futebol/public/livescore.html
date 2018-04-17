@@ -71,18 +71,25 @@
             var elem = document.querySelector('select');
             var instance = M.FormSelect.init(elem, "options");
 
-          console.log('teste');
-          console.log(document.getElementById('livescores'))
-          this.$http.get('http://livescore-api.com/api-client/scores/live.json?key=6WjGWWrPHEX9YJVq&secret=mmRh1Fk2aEqxahqgdJX9GoZn3Xw1Grs2').then(
-            response => {
-                console.log("Ok. Baixado");
-                this.liveScores = response.body.data.match;
-                console.log(this.liveScores)
-            },
-            error => {
-                console.log(error);
-            }
-          )
+            this.$http.get("https://pizza-ordering-demo.herokuapp.com/getLiveScores").then(
+                response => {
+                    console.log(response);
+                },
+                error => {
+                    console.log(error);
+                }
+            )
+
+        //   this.$http.get('http://livescore-api.com/api-client/scores/live.json?key=6WjGWWrPHEX9YJVq&secret=mmRh1Fk2aEqxahqgdJX9GoZn3Xw1Grs2').then(
+        //     response => {
+        //         console.log("Ok. Baixado");
+        //         this.liveScores = response.body.data.match;
+        //         console.log(this.liveScores)
+        //     },
+        //     error => {
+        //         console.log(error);
+        //     }
+        //   )
         }
     })        
 </script>
