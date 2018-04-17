@@ -118,6 +118,25 @@ app.get('/webview', (req, res, next) => {
         res.sendFile('public/livescore.html', {root: __dirname});
     }
 });
+
+app.get('/getLiveScores', (req, res, next) => {
+
+    request({
+        url: " http://livescore-api.com/api-client/scores/live.json",
+      qs: {
+        key: "6WjGWWrPHEX9YJVq",
+        secret: "mmRh1Fk2aEqxahqgdJX9GoZn3Xw1Grs2"
+      },
+      method: "GET"
+    }, function (error, response, body) {
+        return body;
+        if (error) {
+            console.log('Erro ao buscar dado no servidor', error);
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error);
+        }
+    });
+});
 //-----------------------------------------------------------------------------------
 app.post('/webhook/', (req, res) => {
     var text = null;
