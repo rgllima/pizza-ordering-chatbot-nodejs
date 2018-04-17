@@ -119,19 +119,25 @@ app.get('/webview', (req, res, next) => {
     }
 });
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 app.get('/getLiveScores', (req, res, next) => {
     
     var request = require('request');
-    
+
     request({
-        url: " http://livescore-api.com/api-client/scores/live.json",
+      url: " http://livescore-api.com/api-client/scores/live.json",
       qs: {
         key: "6WjGWWrPHEX9YJVq",
         secret: "mmRh1Fk2aEqxahqgdJX9GoZn3Xw1Grs2"
       },
       method: "GET"
     }, function (error, response, body) {
-        res.send(body);//rever akiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+        res.send(body); //enviando para o navegador o resultado da consulta
         if (error) {
             console.log('Erro ao buscar dado no servidor', error);
         } else if (response.body.error) {
