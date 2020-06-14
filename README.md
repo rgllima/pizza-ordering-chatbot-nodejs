@@ -26,4 +26,4 @@ This project served as a study of the language, besides giving me the opportunit
 - Facebook for Developers
 - IBM Watson
 
-As it is a beginner project (in the language and in the development area), there is no file structure, the functions are poorly done, the responsibilities are poorly distributed and basically everything is done in index.js.
+As it is a beginner project (in the language and in the development area), there is no file structure, the functions are poorly done, the responsibilities are poorly distributed and basically everything is done in `index.js`.
