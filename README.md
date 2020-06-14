@@ -1,13 +1,24 @@
-# Node.js Hello World Sample
+# Sobre esse Projeto (Em Português)
 
-This application demonstrates a simple, reusable Node.js web application based on the Express framework.
+Este foi um dos meus primeiros programas desenvolvidos utilizando NodeJs.
 
-## Run the app locally
+Este projeto serviu de estudo da linguagem, além de me dar a oportunidade de conhecer algumas ferramentas, tais como:
+- Heroku
+- VueJs
+- Firebase
+- Facebook para Desenvolvedores
+- IBM Watson
 
-1. [Install Node.js][]
-1. cd into this project's root directory
-1. Run `npm install` to install the app's dependencies
-1. Run `npm start` to start the app
-1. Access the running app in a browser at <http://localhost:6001>
+Por ser um projeto de iniciante (na linguagem e na área de desenvolvimento), não há estrutura de arquivos, as funções são mal feitas, as responsabilidades são mal distribuídas e basicamente tudo é realizado na `index.js`.
 
-[Install Node.js]: https://nodejs.org/en/download/
+# About this Project (In English)
+This was one of my first programs developed using NodeJs.
+
+This project served as a study of the language, besides giving me the opportunity to know some tools, such as:
+- Heroku
+- VueJs
+- Firebase
+- Facebook for Developers
+- IBM Watson
+
+As it is a beginner project (in the language and in the development area), there is no file structure, the functions are poorly done, the responsibilities are poorly distributed and basically everything is done in index.js.
